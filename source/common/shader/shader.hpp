@@ -30,7 +30,8 @@ namespace our
 
         void use()
         {
-            // TODO: call opengl to use the program identified by this->program
+            // TODO (DONE): call opengl to use the program identified by this->program 
+            glUseProgram(this->program);
         }
 
         void getUniformLocation(const std::string &name)
