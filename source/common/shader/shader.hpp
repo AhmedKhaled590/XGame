@@ -43,7 +43,6 @@ namespace our
         void set(const std::string &uniform, GLfloat value)
         {
             // TODO: call opengl to set the value to the uniform defined by name
-            glUniform1f(glGetUniformLocation(this->program, uniform.c_str()), value);
         }
 
         void set(const std::string &uniform, glm::vec2 value)
