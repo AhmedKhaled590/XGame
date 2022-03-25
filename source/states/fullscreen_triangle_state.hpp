@@ -55,6 +55,7 @@ class FullscreenTriangleState: public our::State {
         }
 
         //TODO: Create a vertex Array
+        glGenVertexArrays(1, &ID);
 
         // We set the clear color to be black
         glClearColor(0.0, 0.0, 0.0, 1.0);
