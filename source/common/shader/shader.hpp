@@ -31,16 +31,19 @@ namespace our
         void use()
         {
             // TODO: call opengl to use the program identified by this->program
+            glUseProgram(this->program);
         }
 
         void getUniformLocation(const std::string &name)
         {
             // TODO: call opengl to get the uniform location for the uniform defined by name from this->program
+            glGetUniformLocation(this->program, name.c_str());
         }
 
         void set(const std::string &uniform, GLfloat value)
         {
             // TODO: call opengl to set the value to the uniform defined by name
+            glUniform1f(glGetUniformLocation(this->program, uniform.c_str()), value);
         }
 
         void set(const std::string &uniform, glm::vec2 value)
@@ -60,6 +63,13 @@ namespace our
 
         // TODO: Delete the copy constructor and assignment operator
         // Question: Why do we do this? Hint: Look at the deconstructor
+        ShaderProgram(const ShaderProgram &) = delete;
+        ShaderProgram &operator=(const ShaderProgram &) = delete;
+
+        /**
+         * Answer:
+         * we
+         */
     };
 
 }
