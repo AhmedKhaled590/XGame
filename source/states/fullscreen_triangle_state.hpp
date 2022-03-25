@@ -15,7 +15,8 @@ namespace glm {
 class FullscreenTriangleState: public our::State {
     
     our::ShaderProgram program;
-    //TODO: Add a variable in which we will store the name (ID) for a vertex array
+    //TODO (DONE): Add a variable in which we will store the name (ID) for a vertex array
+    unsigned int ID;
 
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
