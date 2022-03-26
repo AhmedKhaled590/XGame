@@ -73,5 +73,8 @@ class FullscreenTriangleState: public our::State {
     // onInitialize() function is called once after the state ends
     void onDestroy() override {
         //TODO: Delete the vertex Array
+
+        //==//Deletes One Vertex Object (id) 
+        glDeleteVertexArrays(1, &ID);
     }
 };
