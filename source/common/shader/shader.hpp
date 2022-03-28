@@ -47,7 +47,6 @@ namespace our
         void set(const std::string &uniform, GLfloat value)
         {
             // TODO: call opengl to set the value to the uniform defined by name
-
             //==// Set Val To The Uniform That Specified By Location
             glUniform1f(getUniformLocation(uniform), value);
         }
