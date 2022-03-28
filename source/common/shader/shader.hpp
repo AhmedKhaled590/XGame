@@ -31,13 +31,17 @@ namespace our
         void use()
         {
             // TODO: call opengl to use the program identified by this->program
+            // installs the program object specified by program as part of current rendering state.
             glUseProgram(this->program);
         }
 
         GLuint getUniformLocation(const std::string &name)
         {
             // TODO: call opengl to get the uniform location for the uniform defined by name from this->program
-            return glGetUniformLocation(this->program, name.c_str());
+            return glGetUniformLocation(
+                this->program, // Specifies the program object to be queried.
+                name.c_str()   // the name of the uniform variable whose location is to be queried.
+            );
         }
 
         void set(const std::string &uniform, GLfloat value)
