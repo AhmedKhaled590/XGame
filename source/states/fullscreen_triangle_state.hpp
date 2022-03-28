@@ -80,6 +80,8 @@ class FullscreenTriangleState : public our::State
         glClear(GL_COLOR_BUFFER_BIT);
 
         // TODO: Draw a triangle using the vertex array and the program
+        glBindVertexArray(ID);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
     // onInitialize() function is called once after the state ends
