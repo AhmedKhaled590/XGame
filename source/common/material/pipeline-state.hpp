@@ -45,29 +45,38 @@ namespace our
         // This function should set the OpenGL options to the values specified by this structure
         // For example, if faceCulling.enabled is true, you should call glEnable(GL_CULL_FACE), otherwise, you should call glDisable(GL_CULL_FACE)
 
-        // TODO: (Req 3) Write this function
-    void setup() const {
-            if (faceCulling.enabled) {
-                glEnable(GL_CULL_FACE); // Enable face culling to be used
-                glCullFace(faceCulling.culledFace); // Specify which face to be culled
-                glFrontFace(faceCulling.frontFace); // Specify which face to be rendered (counter clock wise or clockwise)
+        // TODO: (Req 3) Write this function (depth testing, face culling, blending and color/depth mask options).
+        void setup() const
+        {
+            //==// faceCulling: allows non-visible objects of closed surfaces to be removed before expensive Rasterization and Fragment Shader operations.
+            if (faceCulling.enabled)
+            {
+                glEnable(GL_CULL_FACE);             // To enable face culling
+                glCullFace(faceCulling.culledFace); // select which face to be culled
+                glFrontFace(faceCulling.frontFace); // select which face to be rendered (counter-clockwise or clockwise)
             }
             else
-                glDisable(GL_CULL_FACE);
+                glDisable(GL_CULL_FACE); // To disable face culling
 
-            if (depthTesting.enabled) {
-                glEnable(GL_DEPTH_TEST);    // Enable depth testing to be used
+
+            //==//depthTesting: The Depth Test is a per-sample processing operation performed after the Fragment Shader (and sometimes before).
+            //The Fragment's output depth value may be tested against the depth of the sample being written to. If the test fails, the fragment is discarded. 
+            //If the test passes, the depth buffer will be updated with the fragment's output depth, unless a subsequent per-sample operation prevents it (such as turning off depth writes).
+            if (depthTesting.enabled)
+            {
+                glEnable(GL_DEPTH_TEST);            // To enable depth testing
                 glDepthFunc(depthTesting.function); // Specify when to replace the written depth value with the new value
             }
             else
-                glDisable(GL_DEPTH_TEST);
+                glDisable(GL_DEPTH_TEST); // To disable depth testing
 
             // result color = src factor * src color + dest factor * dest color
-            if (blending.enabled) {
+            if (blending.enabled)
+            {
                 glEnable(GL_BLEND);
                 // Specify the the source and destination blending factors according to "constant color" and it is defaulted to be 0.
                 glBlendColor(blending.constantColor[0], blending.constantColor[1], blending.constantColor[2], blending.constantColor[3]);
-                glBlendEquation(blending.equation); // Add the two colors together including the factor (GL_FUNC_ADD)
+                glBlendEquation(blending.equation);                             // Add the two colors together including the factor (GL_FUNC_ADD)
                 glBlendFunc(blending.sourceFactor, blending.destinationFactor); // Specify the factor for source color and destination color
             }
             else
@@ -77,7 +86,7 @@ namespace our
             glColorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
             glDepthMask(depthMask);
         }
-        
+
         // Given a json object, this function deserializes a PipelineState structure
         void deserialize(const nlohmann::json &data);
     };
