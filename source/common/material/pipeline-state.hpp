@@ -58,10 +58,9 @@ namespace our
             else
                 glDisable(GL_CULL_FACE); // To disable face culling
 
-
             //==//depthTesting: The Depth Test is a per-sample processing operation performed after the Fragment Shader (and sometimes before).
-            //The Fragment's output depth value may be tested against the depth of the sample being written to. If the test fails, the fragment is discarded. 
-            //If the test passes, the depth buffer will be updated with the fragment's output depth, unless a subsequent per-sample operation prevents it (such as turning off depth writes).
+            // The Fragment's output depth value may be tested against the depth of the sample being written to. If the test fails, the fragment is discarded.
+            // If the test passes, the depth buffer will be updated with the fragment's output depth, unless a subsequent per-sample operation prevents it (such as turning off depth writes).
             if (depthTesting.enabled)
             {
                 glEnable(GL_DEPTH_TEST);            // To enable depth testing
@@ -73,17 +72,30 @@ namespace our
             // result color = src factor * src color + dest factor * dest color
             if (blending.enabled)
             {
-                glEnable(GL_BLEND);
-                // Specify the the source and destination blending factors according to "constant color" and it is defaulted to be 0.
+                glEnable(GL_BLEND); // To enable blending
+
+                //==// glBlendColor:  set the blend color, Specify the the source and destination blending factors according to "constant color" and it is defaulted to be 0.
+                // Parameters: (red, green, blue, alpha)
                 glBlendColor(blending.constantColor[0], blending.constantColor[1], blending.constantColor[2], blending.constantColor[3]);
-                glBlendEquation(blending.equation);                             // Add the two colors together including the factor (GL_FUNC_ADD)
-                glBlendFunc(blending.sourceFactor, blending.destinationFactor); // Specify the factor for source color and destination color
+
+                //==// glBlendEquation: specify the equation used for both the RGB blend equation and the Alpha blend equation
+                // Parameters: [mode: specifies how source and destination colors are combined. It must be GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MIN, GL_MAX.]
+                glBlendEquation(blending.equation);
+
+                //==// glBlendFunc: specify pixel arithmetic.
+                // Parameters: sfactor: Specifies how the red, green, blue, and alpha source blending factors are computed. The initial value is GL_ONE.
+                // Parameters: dfactor: Specifies how the red, green, blue, and alpha destination blending factors are computed. The following symbolic constants are accepted: GL_ZERO, GL_ONE etc
+                glBlendFunc(blending.sourceFactor, blending.destinationFactor);
             }
             else
-                glDisable(GL_BLEND);
+                glDisable(GL_BLEND); // To disable blending
 
-            // Enable the changes in all color channels (if set to be true)
+            //==// glColorMask: enable and disable writing of frame buffer color components
+            // Parameters: GLboolean (red, green, blue, alpha)
             glColorMask(colorMask[0], colorMask[1], colorMask[2], colorMask[3]);
+
+            //==// glDepthMask: enable or disable writing into the depth buffer
+            // Parameters: [flag: Specifies whether the depth buffer is enabled for writing. If flag is GL_FALSE, depth buffer writing is disabled. Otherwise, it is enabled. Initially, depth buffer writing is enabled].
             glDepthMask(depthMask);
         }
 
