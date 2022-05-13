@@ -24,4 +24,6 @@ CMakeSettings.json
 # Screenshots
 screenshots/
 
+errors/
+
 *.pdf
