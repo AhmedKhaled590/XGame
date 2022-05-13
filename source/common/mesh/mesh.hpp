@@ -30,7 +30,7 @@ namespace our
         // a vertex array object to define how to read the vertex & element buffer during rendering
         Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &elements)
         {
-            // TODO: (Req 1) Write this function
+            // DONE: (Req 1)  Write this function
             elementCount = elements.size();
 
             // Create a vertex array object (VAO)
@@ -80,7 +80,7 @@ namespace our
         // this function should render the mesh
         void draw()
         {
-            // TODO: (Req 1) Write this function
+            // DONE: (Req 1)  Write this function
             // Bind the VAO
             glBindVertexArray(VAO);
 
@@ -97,7 +97,7 @@ namespace our
         // this function should delete the vertex & element buffers and the vertex array object
         ~Mesh()
         {
-            // TODO: (Req 1) Write this function
+            // DONE: (Req 1)  Write this function
             glDeleteBuffers(1, &VBO);
             glDeleteBuffers(1, &EBO);
             glDeleteVertexArrays(1, &VAO);

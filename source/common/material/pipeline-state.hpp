@@ -45,7 +45,7 @@ namespace our
         // This function should set the OpenGL options to the values specified by this structure
         // For example, if faceCulling.enabled is true, you should call glEnable(GL_CULL_FACE), otherwise, you should call glDisable(GL_CULL_FACE)
 
-        // TODO: (Req 3) Write this function (depth testing, face culling, blending and color/depth mask options).
+        // DONE: (Req 3)  Write this function (depth testing, face culling, blending and color/depth mask options).
         void setup() const
         {
             //==// faceCulling: allows non-visible objects of closed surfaces to be removed before expensive Rasterization and Fragment Shader operations.

@@ -11,22 +11,22 @@ namespace our
     // HINT: to convert euler angles to a rotation matrix, you can use glm::yawPitchRoll
     glm::mat4 Transform::toMat4() const
     {
-        // TODO: (Req 2) Write this function
+        // DONE: (Req 2)  Write this function
 
         // ========== // ---- Steps of transformations function ---- // ========== //
         //==// 1-Create identity matrix that will used in (scaling & translation).
-        
+
         //==// 2- Create scaling matrix using glm::scale
         // glm::scale: it builds a scale 4 * 4 matrix created from 3 scalars.
         // Parameters: (Input matrix multiplied by this scale matrix, Ratio of scaling for each axis)
-        
+
         //==// 3- Create rotation matrix using glm::yawPitchRoll
         // Creates a 3D 4 * 4 homogeneous rotation matrix from euler angles (Y * X * Z).
 
         //==// 4- Create scaling matrix using glm::translate
         // glm::translate: it builds a scale 4 * 4 matrix created from 3 scalars.
         // Parameters: (Input matrix multiplied by this translation matrix, Coordinates of a translation vector).
-        
+
         //==// 5- multiply the matrices by this order (translation, rotation, scale) & return the result which will be the transformation matrix.
         // ========== // ---- End ---- // ========== //
 
