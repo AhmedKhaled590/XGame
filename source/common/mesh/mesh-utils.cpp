@@ -66,8 +66,6 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
                 attrib.colors[3 * index.vertex_index + 2] * 255,
                 255};
 
-            std::cout << "vertex.color: " << vertex.color.r << " " << vertex.color.g << " " << vertex.color.b << " " << vertex.color.a << std::endl;
-
             // See if we already stored a similar vertex
             auto it = vertex_map.find(vertex);
             if (it == vertex_map.end())
