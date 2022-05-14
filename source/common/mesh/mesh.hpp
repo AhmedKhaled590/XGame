@@ -42,7 +42,9 @@ namespace our
             glGenBuffers(1, &VBO);
             // Bind the VBO
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
             // Copy the vertex data to the VBO
+            // STATIC_DRAW: The data will be stored once and used many times (like a static variable) and contents are modified by the application.
             glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
             // Create an element buffer object (EBO)
@@ -55,7 +57,13 @@ namespace our
 
             // Tell OpenGL how to interpret the vertex data
             glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
-            glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
+            glVertexAttribPointer(
+                ATTRIB_LOC_POSITION, // Attribute location
+                3,                   // Number of elements per vertex
+                GL_FLOAT,            // Type of the elements
+                GL_FALSE,            // Normalized?
+                sizeof(Vertex),      // Stride: Size of an individual vertex
+                (void *)0);          // Offset from the beginning of a single vertex to this attribute
 
             glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
             glVertexAttribPointer(ATTRIB_LOC_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void *)(3 * sizeof(float)));
@@ -91,7 +99,11 @@ namespace our
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
             // Draw the mesh
-            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+            glDrawElements(
+                GL_TRIANGLES,    // mode
+                elementCount,    // count
+                GL_UNSIGNED_INT, // type
+                0);              // element array buffer offset
         }
 
         // this function should delete the vertex & element buffers and the vertex array object
