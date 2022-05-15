@@ -207,8 +207,9 @@ namespace our {
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0); // not sure
             
             //TODO: (Req 10) Setup the postprocess material and draw the fullscreen triangle
+            glBindVertexArray(postProcessVertexArray);
             postprocessMaterial->setup();
-            //Draw Triangle??
+            glDrawArrays(GL_TRIANGLES,0,3);
         }
     }
 
