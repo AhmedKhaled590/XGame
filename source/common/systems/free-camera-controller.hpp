@@ -164,8 +164,6 @@ namespace our
                     isJump=false;
                 }
             }
-
-            cout<<entity->localTransform.position[1];
             
             entity->localTransform.position += deltaTime * controller->linearVelocity;
         }
