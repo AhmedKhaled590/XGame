@@ -48,7 +48,6 @@
             "meshes":{
                 "plane": "assets/models/plane.obj",
                 "cube": "assets/models/heartObj.obj",
-                "skull": "assets/models/skull.obj",
                 "monkey": "assets/models/monkey.obj",
                 "sphere": "assets/models/sphere.obj",
                 "car": "assets/models/car.obj"
@@ -196,7 +195,7 @@
               "scale": [0.3, 0.3, 0.3],
               "name": "skull",
               "components": [
-                { "type": "Mesh Renderer", "mesh": "skull", "material": "black" },
+                { "type": "Mesh Renderer", "mesh": "cube", "material": "black" },
                  
                     {
                         "type": "Movement",
