@@ -33,7 +33,7 @@
                 "monkey": "assets/textures/monkey.png",
                 "tex1": "assets/textures/Tex_0001_0.png",
                 "text": "assets/textures/menutext.jpg",
-                "skullfront": "assets/textures/front.jpg"
+                "healthbar": "assets/textures/healthbar.png"
 
             },  
             "meshes":{
@@ -72,7 +72,28 @@
                     "texture": "tex1",
                     "sampler": "pixelated"
                 },
-               
+               "health":{
+                "type": "textured",
+                "shader": "textured",
+                "pipelineState": {
+                    "faceCulling":{
+                        "enabled": true
+                    },
+                    "depthTesting":{
+                        "enabled": true
+                    },
+                    "blending":{
+                        "enabled": true,
+                        "sourceFactor": "GL_SRC_ALPHA",
+                        "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                    },
+                    "depthMask": true
+                },
+                "transparent": false,
+                "tint": [1, 1,1, 1],
+                "texture": "healthbar",
+                "sampler": "pixelated"
+               },
                 
                 "metal": {
                     "type": "tinted",
@@ -195,9 +216,85 @@
                         "maxRotationAngle": 0.785
                     }
                   ]
+                },
+                {
+                  "position": [-1.8, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-1.95, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-2.1, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-2.25, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-2.4, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-2.55, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
+                },
+                {
+                  "position": [-2.7, 2.5, -3],
+                  "rotation": [0, 0, 0],
+                  "scale": [0.06, 0.04,0.1],
+                  "name":"healthbar",
+                  "components": [
+                    { "type": "Mesh Renderer",
+                      "mesh": "plane", "material": "red"
+                    }
+                  ]
                 }
               ]
-            
             },        
             {
                 "position": [0, -1, 0],

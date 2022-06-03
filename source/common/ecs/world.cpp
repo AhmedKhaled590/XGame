@@ -18,6 +18,7 @@ namespace our
             Entity *entity = add();
             entity->parent = parent;
             entity->deserialize(entityData);
+            
             if (entity->name == "road")
             {
                 for (int i = 0; i < 2000; i++)
