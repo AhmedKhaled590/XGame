@@ -32,17 +32,8 @@
                 "road": "assets/textures/road_d.jpg",
                 "monkey": "assets/textures/monkey.png",
                 "tex1": "assets/textures/Tex_0001_0.png",
-                "tex2": "assets/textures/Tex_0002_1.png",
-                "tex3": "assets/textures/Tex_0003_0.png",
-                "tex4": "assets/textures/Tex_0004_1.png",
-                "tex5": "assets/textures/Tex_0005_0.png",
-                "tex6": "assets/textures/Tex_0006_1.png",
-                "tex7": "assets/textures/Tex_0104_0.png",
-                "skullfront": "assets/textures/front.jpg",
-                "skulldown": "assets/textures/down.jpg",
-                "skullside": "assets/textures/side.jpg",
-                "skulltop": "assets/textures/top.jpg",
-                "skullup": "assets/textures/up.jpg"
+                "text": "assets/textures/menutext.jpg",
+                "skullfront": "assets/textures/front.jpg"
 
             },  
             "meshes":{
@@ -81,6 +72,8 @@
                     "texture": "tex1",
                     "sampler": "pixelated"
                 },
+               
+                
                 "metal": {
                     "type": "tinted",
                     "shader": "tinted",
@@ -146,8 +139,20 @@
                     "tint": [1, 1, 1, 1],
                     "texture": "road",
                     "sampler": "default"
+                  },"text": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                      "faceCulling": {
+                        "enabled": false
+                      },
+                      "depthTesting": {
+                        "enabled": true
+                      }
+                    },
+                    "texture": "text",
+                    "sampler": "default"
                   }
-               
                
             }
         },
@@ -190,10 +195,10 @@
                 ]
             },
             {
-              "position": [6, -0.5, 4],
+              "position": [6, -0.5, 2],
               "rotation": [0, 0, 0],
               "scale": [0.3, 0.3, 0.3],
-              "name": "skull",
+              "name": "cube",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "cube", "material": "black" },
                  
@@ -315,6 +320,30 @@
                     }
                 ]
                 }
+          ],
+          "menu":[
+            {
+              "position": [0, 0, 10],
+              "components": [
+                {
+                  "type": "Camera"
+                },
+                {
+                  "type": "Free Camera Controller"
+                }
+              ]
+            },
+            {
+              "position": [0, 0, 0],
+              "scale": [10, 10, 10],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "text"
+                }
+              ]
+            } 
           ]
     }
 }

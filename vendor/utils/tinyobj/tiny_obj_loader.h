@@ -2807,8 +2807,7 @@ namespace tinyobj
           token += 7;
 
           std::vector<std::string> filenames;
-          filenames.push_back("assets/models/car.mtl");
-          filenames.push_back("assets/models/skull.mtl");
+          // filenames.push_back("assets/models/car.mtl");
           SplitString(std::string(token), ' ', filenames);
 
           if (filenames.empty())

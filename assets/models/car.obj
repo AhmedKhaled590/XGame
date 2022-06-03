@@ -1,6 +1,6 @@
 # Blender v2.77 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib car.mtl
+mtllib assets/models/car.mtl
 o Mesh_0068
 v 1.756500 1.607600 -2.027700
 v 1.647800 1.641100 -2.000300
