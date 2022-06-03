@@ -10,12 +10,19 @@
 
 namespace our
 {
+   
 
     // The movement system is responsible for moving every entity which contains a MovementComponent.
     // This system is added as a simple example for how use the ECS framework to implement logic. 
     // For more information, see "common/components/movement.hpp"
     class MovementSystem {
+
+        Application* app; // The application in which the state runs
     public:
+
+        void enter(Application* app){
+            this->app = app;
+        }
 
         // This should be called every frame to update all entities containing a MovementComponent. 
         void update(World* world, float deltaTime) {
@@ -25,9 +32,38 @@ namespace our
                 MovementComponent* movement = entity->getComponent<MovementComponent>();
                 // If the movement component exists
                 if(movement){
-                    // Change the position and rotation based on the linear & angular velocity and delta time.
-                    entity->localTransform.position += deltaTime * movement->linearVelocity;
-                    entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+
+                    if (entity->name != "car")
+                    {
+                        entity->localTransform.position += deltaTime * movement->linearVelocity;
+                        entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+                    }
+                    else
+                   {
+                        if(app->getKeyboard().isPressed(GLFW_KEY_LEFT))
+                        {
+                            // movement->angularVelocity = glm::vec3(0, movement->rotationSensitivity, 0);
+                            // entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+                            // if(entity->localTransform.rotation[1]<(180-45)*(22/7)/180)
+                            //     entity->localTransform.rotation[1]=(180-45)*(22/7)/180;
+                            entity->localTransform.rotation[1]=(180+45)*(22/7.0)/180.0;
+                            
+                        }
+                        else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+                        {
+                            // movement->angularVelocity = glm::vec3(0, -1*movement->rotationSensitivity, 0);
+                            // entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+                            // if(entity->localTransform.rotation[1]>(180+45)*(22/7)/180)
+                            //     entity->localTransform.rotation[1]=(180+45)*(22/7)/180;
+                            entity->localTransform.rotation[1]=(180-45)*(22/7.0)/180.0;
+
+                        }
+                        else {
+                            entity->localTransform.rotation[1]=22/7.0;
+                        }
+                    }
+
+                    
                 }
             }
         }

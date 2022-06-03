@@ -154,24 +154,47 @@
         "world": [
             
             {
-              "position": [0, 0, 9.8],
+              "position": [0, 2, 14],
               "components": [
                 { "type": "Camera" },
-                { "type": "Free Camera Controller" }
+                { "type": "Free Camera Controller", 
+                  "linearVelocity": [0, 0, 0],
+                  "angularVelocity": [0, 0, 0],
+                  "speedSensitivity": -0.5, 
+                  "brakeSensitivity":0.5,
+                  "maxSpeed":-15,
+                  "frictionSensitivity":0.1,
+
+                  "rotationSensitivity": 2,
+                  "maxRotationAngle": 0.785,
+                  "jumpSensitivity": 1,
+                  "jumpSpeed":20,
+                  "originalY":2
+                }
               ],
-              "children": [
-               
+              "children":[
                 {
-                  "position": [-0.2, -1, -2],
-                  "rotation": [-10, 180, 0],
+                  "position": [0, -2, -3],
+                  "rotation": [0, 180, 0],
                   "scale": [0.2, 0.2, 0.2],
                   "name":"car",
                   "components": [
-                    { "type": "Mesh Renderer", "mesh": "car", "material": "car" }
+                    { "type": "Mesh Renderer",
+                      "mesh": "car", "material": "car"
+                    },
+                    {
+                        "type": "Movement",
+                        "linearVelocity": [0, 0, 0],
+                        "angularVelocity": [0, 0, 0],
+                        "rotationSensitivity": 2,
+                        "maxRotationAngle": 0.785
+                    }
                   ]
                 }
               ]
+            
             },
+            
             
             {
                 "position": [0, -1, 0],
