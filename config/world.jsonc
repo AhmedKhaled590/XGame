@@ -29,7 +29,7 @@
                 "glass": "assets/textures/glass-panels.png",
                 "moon": "assets/textures/moon.jpg",
                 "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/road_d.jpg",
+                "road": "assets/textures/road_d.jpg",
                 "monkey": "assets/textures/monkey.png",
                 "tex1": "assets/textures/Tex_0001_0.png",
                 "tex2": "assets/textures/Tex_0002_1.png",
@@ -37,12 +37,18 @@
                 "tex4": "assets/textures/Tex_0004_1.png",
                 "tex5": "assets/textures/Tex_0005_0.png",
                 "tex6": "assets/textures/Tex_0006_1.png",
-                "tex7": "assets/textures/Tex_0104_0.png"
+                "tex7": "assets/textures/Tex_0104_0.png",
+                "skullfront": "assets/textures/front.jpg",
+                "skulldown": "assets/textures/down.jpg",
+                "skullside": "assets/textures/side.jpg",
+                "skulltop": "assets/textures/top.jpg",
+                "skullup": "assets/textures/up.jpg"
 
             },  
             "meshes":{
                 "plane": "assets/models/plane.obj",
-                "cube": "assets/models/cube.obj",
+                "cube": "assets/models/heartObj.obj",
+                "skull": "assets/models/skull.obj",
                 "monkey": "assets/models/monkey.obj",
                 "sphere": "assets/models/sphere.obj",
                 "car": "assets/models/car.obj"
@@ -122,16 +128,16 @@
                     },
                     "tint": [1, 1, 1, 1]
                   },
-                  "grey": {
+                  "black": {
                     "type": "tinted",
                     "shader": "tinted",
                     "pipelineState": {
                       "faceCulling": { "enabled": false },
                       "depthTesting": { "enabled": true }
                     },
-                    "tint": [0.8, 0.8, 0.8, 1]
+                    "tint": [0, 0, 0, 1]
                   },
-                  "wood": {
+                  "road": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
@@ -139,7 +145,7 @@
                       "depthTesting": { "enabled": true }
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "wood",
+                    "texture": "road",
                     "sampler": "default"
                   }
                
@@ -160,18 +166,20 @@
                   "position": [-0.2, -1, -2],
                   "rotation": [-10, 180, 0],
                   "scale": [0.2, 0.2, 0.2],
+                  "name":"car",
                   "components": [
                     { "type": "Mesh Renderer", "mesh": "car", "material": "car" }
                   ]
                 }
               ]
             },
+            
             {
                 "position": [0, -1, 0],
                 "rotation": [-90, -90, 0],
                 "scale": [10, 10, 1],
                 "components": [
-                  { "type": "Mesh Renderer", "mesh": "plane", "material": "wood" }
+                  { "type": "Mesh Renderer", "mesh": "plane", "material": "road" }
                 ]
             },
             {
@@ -179,87 +187,133 @@
                 "rotation": [-90, -90, 0],
                 "scale": [10, 10, 1],
                 "components": [
-                  { "type": "Mesh Renderer", "mesh": "plane", "material": "wood" }
+                  { "type": "Mesh Renderer", "mesh": "plane", "material": "road" }
                 ]
+            },
+            {
+              "position": [6, -0.5, 4],
+              "rotation": [0, 0, 0],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "skull",
+              "components": [
+                { "type": "Mesh Renderer", "mesh": "skull", "material": "black" },
+                 
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
+              ]
             },
             {
               "position": [2, -0.5, 2],
               "rotation": [0, 0, 0],
-              "scale": [0.1, 0.1, 0.1],
+              "scale": [0.3, 0.3, 0.3],
               "name": "cube",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "cube", "material": "red" },
-                { "type": "Collider", "position": [0, 0, 0] }
+                 
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
               ]
             },
             {
               "position": [0, 0, -2],
               "rotation": [0, 0, 0],
-              "scale": [0.1, 0.1, 0.1],
+              "scale": [0.3, 0.3, 0.3],
               "name": "cube",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "cube", "material": "green" },
-                { "type": "Collider", "position": [0, 0, 0] }
+                 
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
               ]
             },
             {
               "position": [8, 0, 0],
               "rotation": [0, 90, 0],
-              "scale": [0.1, 0.1, 0.1],
+              "scale": [0.3, 0.3, 0.3],
               "name": "cube",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "cube", "material": "blue" },
-                { "type": "Collider", "position": [0, 0, 0] }
+                 
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
               ]
             },
             {
               "position": [-8, -0.5, 0],
               "rotation": [0, 90, 0],
-              "scale": [0.1, 0.1, 0.1],
+              "scale": [0.3, 0.3, 0.3],
               "name": "cube",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "cube", "material": "red" },
-                { "type": "Collider", "position": [0, 0, 0] }
+                 
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
               ]
             },
             {
                 "position": [3, 0, -10],
                 "rotation": [0, 0, 0],
-                "scale": [0.1, 0.1, 0.1],
+                "scale": [0.3, 0.3, 0.3],
                 "name": "cube",
                 "components": [
                     { "type": "Mesh Renderer", "mesh": "cube", "material": "green" },
-                    { "type": "Collider", "position": [0, 0, 0] }
+                     
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
                 ]
                 },
                 {
                 "position": [2, -1, -13],
                 "rotation": [0, 0, 0],
-                "scale": [0.1, 0.1, 0.1],
+                "scale": [0.3, 0.3, 0.3],
                 "name": "cube",
                 "components": [
                     { "type": "Mesh Renderer", "mesh": "cube", "material": "red" },
-                    { "type": "Collider", "position": [0, 0, 0] }
+                     
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
                 ]
                 },
                 {
                 "position": [4, -0.5, -16],
                 "rotation": [0, 90, 0],
-                "scale": [0.1, 0.1, 0.1],
+                "scale": [0.3, 0.3, 0.3],
                 "name": "cube",
                 "components": [
                     { "type": "Mesh Renderer", "mesh": "cube", "material": "green" },
-                    { "type": "Collider", "position": [0, 0, 0] }
+                    
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
                 ]
                 },
                 {
                 "position": [-4, -0.5, -30],
                 "rotation": [0, 90, 0],
-                "scale": [0.1, 0.1, 0.1],
+                "scale": [0.3, 0.3, 0.3],
                 "name": "cube",
                 "components": [
                     { "type": "Mesh Renderer", "mesh": "cube", "material": "blue" },
-                    { "type": "Collider", "position": [0, 0, 0] }
+                     
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
                 ]
                 }
           ]
