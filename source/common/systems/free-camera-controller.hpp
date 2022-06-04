@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/mesh-renderer.hpp"
 
 #include "../application.hpp"
 
@@ -30,7 +31,24 @@ namespace our
         {
             this->app = app;
         }
-
+        bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
+        {
+            Entity *entity = car->getOwner();
+            glm::vec3 &carPos = entity->localTransform.position;
+            entity = heart->getOwner();
+            glm::vec3 &heartPos = entity->localTransform.position;
+            bool collisionX = carPos.x + 0.8 >= heartPos.x &&
+                              heartPos.x + 0.6 >= carPos.x;
+            cout << "x" << endl;
+            cout << carPos.x << " " << heartPos.x << endl;
+            cout << "y" << endl;
+            cout << carPos.y << " " << heartPos.y << endl;
+            cout << "z" << endl;
+            cout << carPos.z << " " << heartPos.z << endl;
+            bool collisionZ = carPos.z + 1 >= heartPos.z &&
+                              heartPos.z + 0.7 >= carPos.z;
+            return collisionX && collisionZ;
+        }
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent
         void update(World *world, float deltaTime)
         {
@@ -50,6 +68,27 @@ namespace our
                 return;
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             Entity *entity = camera->getOwner();
+            MeshRendererComponent *car = nullptr;
+            std::vector<MeshRendererComponent *> hearts;
+            for (auto entity : world->getEntities())
+            {
+                if (entity->name == "car")
+                {
+                    car = entity->getComponent<MeshRendererComponent>();
+                }
+                else if (entity->name == "heart")
+                {
+                    hearts.push_back(entity->getComponent<MeshRendererComponent>());
+                }
+            }
+            for (auto heart : hearts)
+            {
+                if (checkCollision(car, heart))
+                {
+                    std::cout << "collision" << std::endl;
+                    std::cout << "collision" << std::endl;
+                }
+            }
 
             // // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
             // if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
@@ -171,14 +210,6 @@ namespace our
             }
 
             entity->localTransform.position += deltaTime * controller->linearVelocity;
-            if (entity->localTransform.position.x < -9)
-            {
-                entity->localTransform.position.x = -9;
-            }
-            if (entity->localTransform.position.x > 9)
-            {
-                entity->localTransform.position.x = 9;
-            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
@@ -191,5 +222,4 @@ namespace our
             }
         }
     };
-
 }
