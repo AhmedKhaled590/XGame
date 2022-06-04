@@ -33,7 +33,7 @@ namespace our
             {
                 // generate random positions for the hearts with a random color
                 string colors[] = {"red", "green", "blue", "green", "black", "white", "black", "red", "black", "black", "white", "green"};
-                for (int i = 0; i < 2000; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     Entity *child = add();
                     child->parent = parent;

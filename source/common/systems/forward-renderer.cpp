@@ -1,7 +1,6 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
-#include "GL/glut.h"
 #include "imgui.h"
 
 namespace our

@@ -34,9 +34,9 @@ namespace our
         bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
         {
             Entity *entity = car->getOwner();
-            glm::vec3 &carPos = entity->localTransform.position;
+            glm::vec3 &carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             entity = heart->getOwner();
-            glm::vec3 &heartPos = entity->localTransform.position;
+            glm::vec3 &heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             bool collisionX = carPos.x + 0.8 >= heartPos.x &&
                               heartPos.x + 0.6 >= carPos.x;
             cout << "x" << endl;
@@ -223,3 +223,4 @@ namespace our
         }
     };
 }
+    
