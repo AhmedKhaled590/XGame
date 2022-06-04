@@ -3,7 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
-#include "../components/mesh-renderer.hpp"
+#include "../components/collider.hpp"
 
 #include "../application.hpp"
 
@@ -31,23 +31,17 @@ namespace our
         {
             this->app = app;
         }
-        bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
+        bool checkCollision(ColliderComponent *car, ColliderComponent *heart)
         {
-            Entity *entity = car->getOwner();
-            glm::vec3 &carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            entity = heart->getOwner();
-            glm::vec3 &heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            bool collisionX = carPos.x + 0.8 >= heartPos.x &&
-                              heartPos.x + 0.6 >= carPos.x;
-            cout << "x" << endl;
-            cout << carPos.x << " " << heartPos.x << endl;
-            cout << "y" << endl;
-            cout << carPos.y << " " << heartPos.y << endl;
-            cout << "z" << endl;
-            cout << carPos.z << " " << heartPos.z << endl;
-            bool collisionZ = carPos.z + 1 >= heartPos.z &&
-                              heartPos.z + 0.7 >= carPos.z;
-            return collisionX && collisionZ;
+            glm::vec3 car_pos = car->getOwner()->localTransform.position;
+            glm::vec3 car_size = car->getOwner()->localTransform.scale;
+            glm::vec3 car_max = car_pos + car_size;
+            glm::vec3 car_min = car_pos - car_size;
+            glm::vec3 heart_pos = heart->getOwner()->localTransform.position;
+            glm::vec3 heart_size = heart->getOwner()->localTransform.scale;
+            glm::vec3 heart_max = heart_pos + heart_size;
+            glm::vec3 heart_min = heart_pos - heart_size;
+            return car_max.x >= heart_min.x && car_min.x <= heart_max.x && car_max.y >= heart_min.y && car_min.y <= heart_max.y && car_max.z >= heart_min.z && car_min.z <= heart_max.z;
         }
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent
         void update(World *world, float deltaTime)
@@ -68,17 +62,20 @@ namespace our
                 return;
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             Entity *entity = camera->getOwner();
-            MeshRendererComponent *car = nullptr;
-            std::vector<MeshRendererComponent *> hearts;
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
+            ColliderComponent *car = nullptr;
+            std::vector<ColliderComponent *> hearts;
             for (auto entity : world->getEntities())
             {
                 if (entity->name == "car")
                 {
-                    car = entity->getComponent<MeshRendererComponent>();
+                    car = entity->getComponent<ColliderComponent>();
                 }
                 else if (entity->name == "heart")
                 {
-                    hearts.push_back(entity->getComponent<MeshRendererComponent>());
+                    hearts.push_back(entity->getComponent<ColliderComponent>());
                 }
             }
             for (auto heart : hearts)
@@ -87,9 +84,12 @@ namespace our
                 {
                     std::cout << "collision" << std::endl;
                     std::cout << "collision" << std::endl;
+                    std::cout << "collision" << std::endl;
                 }
             }
-
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
             // // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
             // if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
             //     app->getMouse().lockMouse(app->getWindow());
