@@ -1,6 +1,8 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
+#include "GL/glut.h"
+#include "imgui.h"
 
 namespace our
 {
@@ -126,18 +128,20 @@ namespace our
         }
     }
 
-    void ForwardRenderer::render(World *world)
+    void ForwardRenderer::render(World *world, Application *app)
     {
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent *camera = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
+        vector<Entity *> score;
         for (auto entity : world->getEntities())
         {
             // If we hadn't found a camera yet, we look for a camera in this entity
             if (!camera)
                 camera = entity->getComponent<CameraComponent>();
-
+            if (entity->name == "healthbar")
+                score.push_back(entity);
             // If this entity has a mesh renderer component
             if (auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer)
             {
@@ -159,6 +163,15 @@ namespace our
                 }
             }
         }
+        if (score.size() > 7 && world->getEntities().size() > 4)
+        {
+            ImGui::Text("You Win!");
+        }
+
+        if (score.size() <= 0 && world->getEntities().size() > 4)
+        {
+            ImGui::Text("You Lose!");
+        }
 
         // If there is no camera, we return (we cannot render without a camera)
         if (camera == nullptr)
@@ -168,6 +181,7 @@ namespace our
         //  HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
         // glm::vec3 cameraForward = glm::vec3(camera->getViewMatrix() * glm::vec4(0, 1, 0, 0));
         // glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1, 0);
+
         glm::vec3 cameraForward = camera->getViewMatrix()[2];
 
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand &first, const RenderCommand &second)
@@ -239,6 +253,7 @@ namespace our
             // TODO: (Req 9) draw the sky sphere
             this->skySphere->draw();
         }
+
         // TODO: (Req 8) Draw all the transparent commands
         //  Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         for (auto command : transparentCommands)
@@ -261,4 +276,5 @@ namespace our
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
     }
+
 }

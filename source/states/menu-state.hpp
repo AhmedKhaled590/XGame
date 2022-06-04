@@ -3,6 +3,7 @@
 #include <application.hpp>
 
 #include <asset-loader.hpp>
+#include <iostream>
 
 class MenuState : public our::State
 {
@@ -37,10 +38,9 @@ class MenuState : public our::State
     {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
-
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world);
+        renderer.render(&world, getApp());
     }
 
     void onDestroy() override

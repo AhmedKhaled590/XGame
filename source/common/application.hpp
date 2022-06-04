@@ -110,7 +110,6 @@ namespace our
         // The change will not be applied until the current frame ends
         void changeState(std::string name)
         {
-            std::cout << "Changing state to " << name << std::endl;
             auto it = states.find(name);
             if (it != states.end())
             {

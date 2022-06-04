@@ -285,7 +285,6 @@ int our::Application::run(int run_for_frames)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
         if (currentState)
             currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
@@ -293,9 +292,6 @@ int our::Application::run(int run_for_frames)
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
         keyboard.setEnabled(!io.WantCaptureKeyboard, window);
         mouse.setEnabled(!io.WantCaptureMouse, window);
-
-        // Render the ImGui commands we called (this doesn't actually draw to the screen yet.
-        ImGui::Render();
 
         // Just in case ImGui changed the OpenGL viewport (the portion of the window to which we render the geometry),
         // we set it back to cover the whole window
@@ -308,8 +304,10 @@ int our::Application::run(int run_for_frames)
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if (currentState)
             currentState->onDraw(current_frame_time - last_frame_time);
-        last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
 
+        last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
+                                              // Render the ImGui commands we called (this doesn't actually draw to the screen yet.
+        ImGui::Render();
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
         // Since ImGui causes many messages to be thrown, we are temporarily disabling the debug messages till we render the ImGui
         glDisable(GL_DEBUG_OUTPUT);
@@ -323,6 +321,12 @@ int our::Application::run(int run_for_frames)
 #endif
 
         if (keyboard.justPressed(GLFW_KEY_ENTER) && !enter_pressed)
+        {
+            enter_pressed = true;
+            this->changeState("game");
+        }
+
+        if (keyboard.justPressed(GLFW_KEY_Q) && !enter_pressed)
         {
             enter_pressed = true;
             this->changeState("game");
@@ -349,7 +353,6 @@ int our::Application::run(int run_for_frames)
 
         // Swap the frame buffers
         glfwSwapBuffers(window);
-
         // Update the keyboard and mouse data
         keyboard.update();
         mouse.update();
@@ -365,6 +368,7 @@ int our::Application::run(int run_for_frames)
             nextState = nullptr;
             // Initialize the new scene
             currentState->onInitialize();
+            std::cout << "Switched to scene: " << currentState << std::endl;
         }
 
         ++current_frame;

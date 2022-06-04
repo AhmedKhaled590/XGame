@@ -93,6 +93,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        vendor/glut/include
 )
 
 
@@ -114,6 +115,6 @@ set(STATES_SOURCES
 
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
-# Then we link GLFW with each target
+# Then we link GLFW with each target    
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)

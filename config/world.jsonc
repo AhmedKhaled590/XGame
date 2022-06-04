@@ -29,7 +29,7 @@
                 "glass": "assets/textures/glass-panels.png",
                 "moon": "assets/textures/moon.jpg",
                 "grass": "assets/textures/grass_ground_d.jpg",
-                "road": "assets/textures/road_d.jpg",
+                "road": "assets/textures/roaad.jpg",
                 "monkey": "assets/textures/monkey.png",
                 "tex1": "assets/textures/Tex_0001_0.png",
                 "text": "assets/textures/menutext.jpg",
@@ -295,7 +295,8 @@
                   ]
                 }
               ]
-            },        
+            },
+                
             {
                 "position": [0, -1, 0],
                 "rotation": [-90, -90, 0],
@@ -312,13 +313,11 @@
               "name": "heart",
               "components": [
                 { "type": "Mesh Renderer", "mesh": "heart", "material": "black" },
+                { "type": "Movement", "angularVelocity": [0, 90, 0] }
                  
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
-                    }
               ]
             }
+           
             
           ],
           "menu":[

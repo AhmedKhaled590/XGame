@@ -36,7 +36,6 @@ class Playstate : public our::State
 
         movementSystem.enter(getApp());
 
-
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
@@ -49,7 +48,7 @@ class Playstate : public our::State
 
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world);
+        renderer.render(&world,getApp());
     }
 
     void onDestroy() override
