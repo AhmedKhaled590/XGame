@@ -209,6 +209,14 @@ namespace our
             }
 
             entity->localTransform.position += deltaTime * controller->linearVelocity;
+            if (entity->localTransform.position.x < -9)
+            {
+                entity->localTransform.position.x = -9;
+            }
+            if (entity->localTransform.position.x > 9)
+            {
+                entity->localTransform.position.x = 9;
+            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
