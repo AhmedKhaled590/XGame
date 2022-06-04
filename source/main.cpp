@@ -45,6 +45,7 @@ int main(int argc, char **argv)
     // Register all the states of the project in the application
     app.registerState<MenuState>("main");
     app.registerState<Playstate>("game");
+    app.registerState<Playstate>("app");
     app.registerState<MeshTestState>("mesh-test");
     app.registerState<TransformTestState>("transform-test");
     app.registerState<PipelineTestState>("pipeline-test");

@@ -320,29 +320,29 @@
            
             
           ],
-          "menu":[
-            {
-              "position": [0, 0, 10],
-              "components": [
-                {
-                  "type": "Camera"
-                },
-                {
-                  "type": "Free Camera Controller"
-                }
-              ]
-            },
-            {
-              "position": [0, 0, 0],
-              "scale": [10, 10, 10],
-              "components": [
-                {
-                  "type": "Mesh Renderer",
-                  "mesh": "plane",
-                  "material": "text"
-                }
-              ]
-            } 
-          ]
+            "menu":[
+              {
+                "position": [0, 0, 10],
+                "components": [
+                  {
+                    "type": "Camera"
+                  },
+                  {
+                    "type": "Free Camera Controller"
+                  }
+                ]
+              },
+              {
+                "position": [0, 0, 0],
+                "scale": [10, 10, 10],
+                "components": [
+                  {
+                    "type": "Mesh Renderer",
+                    "mesh": "plane",
+                    "material": "text"
+                  }
+                ]
+              } 
+            ]
     }
 }

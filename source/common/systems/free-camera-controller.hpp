@@ -34,19 +34,19 @@ namespace our
         bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
         {
             Entity *entity = car->getOwner();
-            glm::vec3 &carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+            glm::vec3 carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             entity = heart->getOwner();
-            glm::vec3 &heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            bool collisionX = carPos.x + 0.8 >= heartPos.x &&
-                              heartPos.x + 0.6 >= carPos.x;
-            cout << "x" << endl;
-            cout << carPos.x << " " << heartPos.x << endl;
-            cout << "y" << endl;
-            cout << carPos.y << " " << heartPos.y << endl;
-            cout << "z" << endl;
-            cout << carPos.z << " " << heartPos.z << endl;
-            bool collisionZ = carPos.z + 1 >= heartPos.z &&
-                              heartPos.z + 0.7 >= carPos.z;
+            glm::vec3 heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+            bool collisionX = carPos.x + 1 >= heartPos.x &&
+                              heartPos.x >= carPos.x;
+            // cout << "x" << endl;
+            // cout << carPos.x + 1.3 << " " << heartPos.x << endl;
+            // cout << "y" << endl;
+            // cout << carPos.y << " " << heartPos.y << endl;
+            // cout << "z" << endl;
+            // cout << carPos.z + 3 << " " << heartPos.z << endl;
+            bool collisionZ = carPos.z + 3.3 >= heartPos.z &&
+                              heartPos.z >= carPos.z;
             return collisionX && collisionZ;
         }
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent
@@ -85,7 +85,6 @@ namespace our
             {
                 if (checkCollision(car, heart))
                 {
-                    std::cout << "collision" << std::endl;
                     std::cout << "collision" << std::endl;
                 }
             }
@@ -223,4 +222,3 @@ namespace our
         }
     };
 }
-    
