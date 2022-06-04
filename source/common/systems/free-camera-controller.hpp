@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/mesh-renderer.hpp"
 
 #include "../application.hpp"
 
@@ -23,14 +24,31 @@ namespace our
         bool mouse_locked = false; // Is the mouse locked
         bool isJump = false;
 
-
     public:
         // When a state enters, it should call this function and give it the pointer to the application
 
-        void enter(Application* app){
+        void enter(Application *app)
+        {
             this->app = app;
         }
-
+        bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
+        {
+            Entity *entity = car->getOwner();
+            glm::vec3 &carPos = entity->localTransform.position;
+            entity = heart->getOwner();
+            glm::vec3 &heartPos = entity->localTransform.position;
+            bool collisionX = carPos.x + 0.8 >= heartPos.x &&
+                              heartPos.x + 0.6 >= carPos.x;
+            cout << "x" << endl;
+            cout << carPos.x << " " << heartPos.x << endl;
+            cout << "y" << endl;
+            cout << carPos.y << " " << heartPos.y << endl;
+            cout << "z" << endl;
+            cout << carPos.z << " " << heartPos.z << endl;
+            bool collisionZ = carPos.z + 1 >= heartPos.z &&
+                              heartPos.z + 0.7 >= carPos.z;
+            return collisionX && collisionZ;
+        }
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent
         void update(World *world, float deltaTime)
         {
@@ -50,6 +68,27 @@ namespace our
                 return;
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             Entity *entity = camera->getOwner();
+            MeshRendererComponent *car = nullptr;
+            std::vector<MeshRendererComponent *> hearts;
+            for (auto entity : world->getEntities())
+            {
+                if (entity->name == "car")
+                {
+                    car = entity->getComponent<MeshRendererComponent>();
+                }
+                else if (entity->name == "heart")
+                {
+                    hearts.push_back(entity->getComponent<MeshRendererComponent>());
+                }
+            }
+            for (auto heart : hearts)
+            {
+                if (checkCollision(car, heart))
+                {
+                    std::cout << "collision" << std::endl;
+                    std::cout << "collision" << std::endl;
+                }
+            }
 
             // // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
             // if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
@@ -77,7 +116,7 @@ namespace our
             // if(rotation.x < -glm::half_pi<float>() * 0.99f) rotation.x = -glm::half_pi<float>() * 0.99f;
             // if(rotation.x >  glm::half_pi<float>() * 0.99f) rotation.x  = glm::half_pi<float>() * 0.99f;
             // // This is not necessary, but whenever the rotation goes outside the 0 to 2*PI range, we wrap it back inside.
-            // // This could prevent floating point error if the player rotates in single direction for an extremely long time. 
+            // // This could prevent floating point error if the player rotates in single direction for an extremely long time.
             // rotation.y = glm::wrapAngle(rotation.y);
 
             // // We update the camera fov based on the mouse wheel scrolling amount
@@ -89,7 +128,7 @@ namespace our
             // glm::mat4 matrix = entity->localTransform.toMat4();
 
             // glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -1, 0)),
-            //           up = glm::vec3(matrix * glm::vec4(0, 1, 0, 0)), 
+            //           up = glm::vec3(matrix * glm::vec4(0, 1, 0, 0)),
             //           right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
 
             // glm::vec3 current_sensitivity = controller->positionSensitivity;
@@ -103,78 +142,75 @@ namespace our
             // // Q & E moves the player up and down
             // if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
             // if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
-            // // A & D moves the player left or right 
+            // // A & D moves the player left or right
             // if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
             // if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
 
-            
-            
-            if(app->getKeyboard().isPressed(GLFW_KEY_UP)){
+            if (app->getKeyboard().isPressed(GLFW_KEY_UP))
+            {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->speedSensitivity));
-                if (controller->linearVelocity[2]<controller->maxSpeed)
+                if (controller->linearVelocity[2] < controller->maxSpeed)
                 {
-                    controller->linearVelocity[2]=controller->maxSpeed;
+                    controller->linearVelocity[2] = controller->maxSpeed;
                 }
-            } 
-            else if(app->getKeyboard().isPressed(GLFW_KEY_DOWN)){
-                controller->linearVelocity += (glm::vec3(0, 0, controller->brakeSensitivity));
-                if (controller->linearVelocity[2] >0)
-                    controller->linearVelocity[2]=0;
             }
-            else if(controller->linearVelocity[2] != 0)
+            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
+            {
+                controller->linearVelocity += (glm::vec3(0, 0, controller->brakeSensitivity));
+                if (controller->linearVelocity[2] > 0)
+                    controller->linearVelocity[2] = 0;
+            }
+            else if (controller->linearVelocity[2] != 0)
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->frictionSensitivity));
                 if (controller->linearVelocity[2] > 0)
                 {
-                    controller->linearVelocity[2]=0;
+                    controller->linearVelocity[2] = 0;
                 }
             }
 
-            if(app->getKeyboard().isPressed(GLFW_KEY_LEFT))
+            if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
             {
-                //controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
-                controller->linearVelocity[0]= controller->linearVelocity[2];
+                // controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
+                controller->linearVelocity[0] = controller->linearVelocity[2];
             }
-            else if(app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+            else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
-                //controller->linearVelocity = glm::vec3(controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
-                controller->linearVelocity[0]=-1*controller->linearVelocity[2];;
-
+                // controller->linearVelocity = glm::vec3(controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
+                controller->linearVelocity[0] = -1 * controller->linearVelocity[2];
+                ;
             }
             else
             {
                 controller->linearVelocity[0] = 0;
             }
 
-            if(app->getKeyboard().isPressed(GLFW_KEY_SPACE))
+            if (app->getKeyboard().isPressed(GLFW_KEY_SPACE))
             {
-                //controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
-                if(!isJump)
+                // controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
+                if (!isJump)
                 {
-                    controller->linearVelocity[1]=controller->jumpSpeed;
-                    isJump=true;
-                }        
+                    controller->linearVelocity[1] = controller->jumpSpeed;
+                    isJump = true;
+                }
             }
 
             if (isJump)
             {
-                if(controller->linearVelocity[1]>-1*controller->jumpSpeed)
+                if (controller->linearVelocity[1] > -1 * controller->jumpSpeed)
                 {
-                    controller->linearVelocity[1] += (-1*controller->jumpSensitivity);
+                    controller->linearVelocity[1] += (-1 * controller->jumpSensitivity);
                 }
                 else
                 {
-                    controller->linearVelocity[1]=0;
+                    controller->linearVelocity[1] = 0;
                     entity->localTransform.position[1] = controller->originalY;
-                    isJump=false;
+                    isJump = false;
                 }
             }
-            
+
             entity->localTransform.position += deltaTime * controller->linearVelocity;
         }
-
-            
-    
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
         void exit()
@@ -186,5 +222,4 @@ namespace our
             }
         }
     };
-
 }
