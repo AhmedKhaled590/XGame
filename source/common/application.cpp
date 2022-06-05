@@ -368,7 +368,6 @@ int our::Application::run(int run_for_frames)
             nextState = nullptr;
             // Initialize the new scene
             currentState->onInitialize();
-            std::cout << "Switched to scene: " << currentState << std::endl;
         }
 
         ++current_frame;

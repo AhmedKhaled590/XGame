@@ -39,7 +39,7 @@ namespace our
                     child->parent = parent;
                     child->deserialize(entityData);
                     child->localTransform.position.z = i * -1 * 10;
-                    child->localTransform.position.x = rand() % 20 - 10;
+                    child->localTransform.position.x = rand() % 18 - 9;
                     child->localTransform.position.y = rand() % 6 - 2;
                     child->getComponent<MeshRendererComponent>()->material = AssetLoader<Material>::get(colors[rand() % 12]);
                 }
