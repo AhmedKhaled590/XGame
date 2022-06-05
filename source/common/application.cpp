@@ -320,13 +320,8 @@ int our::Application::run(int run_for_frames)
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 #endif
 
+        // AhmedKhaled2
         if (keyboard.justPressed(GLFW_KEY_ENTER) && !enter_pressed)
-        {
-            enter_pressed = true;
-            this->changeState("game");
-        }
-
-        if (keyboard.justPressed(GLFW_KEY_Q) && !enter_pressed)
         {
             enter_pressed = true;
             this->changeState("game");
@@ -368,6 +363,7 @@ int our::Application::run(int run_for_frames)
             nextState = nullptr;
             // Initialize the new scene
             currentState->onInitialize();
+            std::cout << "Initializing new scene" << std::endl;
         }
 
         ++current_frame;

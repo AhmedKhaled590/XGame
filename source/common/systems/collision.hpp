@@ -88,7 +88,7 @@ namespace our
                 if (checkCollision(heart, cars[0]).first)
                 {
 
-                    if (checkCollision(heart, cars[0]).second)
+                    if (checkCollision(heart, cars[0]).second && healthBar.size() > 0)
                     {
                         // add last health bar after collision with special color heart (green)
                         Entity *addedHealthBar = world->add();
