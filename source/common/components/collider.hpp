@@ -1,3 +1,5 @@
+// NOTE: HazemAbdo1
+// Adding collider component so that to distinguish between the cars and hearts and other objects
 #pragma once
 
 #include "../ecs/component.hpp"

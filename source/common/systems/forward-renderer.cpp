@@ -166,7 +166,7 @@ namespace our
                 lights.push_back(lightRenderer);
             }
         }
-        if (score.size() > 7 && world->getEntities().size() > 4)
+        if (score.size() > 12 && world->getEntities().size() > 4)
         {
             ImGui::Text("You Win!");
         }

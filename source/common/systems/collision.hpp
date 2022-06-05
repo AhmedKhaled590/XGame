@@ -1,5 +1,5 @@
+// NOTE: HazemAbdo3
 #pragma once
-
 #include "../ecs/world.hpp"
 #include "../components/collider.hpp"
 #include "../components/movement.hpp"
@@ -19,26 +19,38 @@ namespace our
         std::vector<MeshRendererComponent *> healthBar;
 
     public:
-        // cube-->heart,bullet-->car
-        bool checkCollision(ColliderComponent *heartComponent, ColliderComponent *carComponent)
+        // NOTE: HazemAbdo3.1 function checkCollision()
+        // return pair of two flags
+        // first flag indicates whether the collision happened [1-->collision happened, 0-->no collision]
+        // second flag indicates whether the collision happened with a heart that will increase the health
+        // or a heart that will decrease the health [1-->positive heart, 0-->negative heart]
+        pair<bool, bool> checkCollision(ColliderComponent *heartComponent, ColliderComponent *carComponent)
         {
-
+            pair<bool, bool> result = make_pair(false, false);
             auto car = carComponent->getOwner();
             auto heart = heartComponent->getOwner();
-
             glm::vec3 carCenter = carComponent->position + glm::vec3(car->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             glm::vec3 heartCenter = heartComponent->position + glm::vec3(heart->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             glm::vec3 heartLengths = glm::vec3(heartComponent->length, heartComponent->length, heartComponent->length) * heart->localTransform.scale;
-
             glm::vec3 difference = carCenter - heartCenter;
             // min(max(x, minVal), maxVal)
             glm::vec3 clampedDifference = glm::clamp(difference, heartLengths * glm::vec3(-1.0f, -1.0f, -1.0f), heartLengths);
-
             glm::vec3 heartPoint = heartCenter + clampedDifference;
             difference = heartPoint - carCenter;
             float carRadius = carComponent->length * glm::length(car->localTransform.scale);
-            return glm::length(difference) < carRadius;
+            result.first = glm::length(difference) < carRadius;
+            // the only heart that will increase the health is the green heart
+            if (heart->getComponent<MeshRendererComponent>()->material == AssetLoader<Material>::get("green"))
+            {
+                result.second = true;
+            }
+            else
+            {
+                result.second = false;
+            }
+            return result;
         }
+        // NOTE: HazemAbdo3.2 function update()
         int update(World *world, float deltaTime)
         {
             // cout << "update collision" << endl;
@@ -65,27 +77,42 @@ namespace our
                     this->healthBar.push_back(healthBar);
                 }
             }
-            cout << "BEFOR SORT" << endl;
+            // cout << "BEFOR SORT" << endl;
             healthBar = sortHealthBars(healthBar);
-            cout << "AFTER SORT" << endl;
+            // cout << "AFTER SORT" << endl;
             // cout << cars.size() << " " << hearts.size() << endl;
             // cout << "before for" << endl;
             for (auto heart : hearts)
             {
-                if (checkCollision(heart, cars[0]))
+                // if collision happened with a heart
+                if (checkCollision(heart, cars[0]).first)
                 {
-                    // //remove heart after collision
-                    // world->markForRemoval(heart->getOwner());
-                    // world->deleteMarkedEntities();
-                    // //remove last health bar after collision
-                    // world->markForRemoval(healthBar[healthBar.size() - 1]->getOwner());
-                    // world->deleteMarkedEntities();
-                    // healthBar.pop_back();
-                    // add last health bar after collision with special color heart
-                    //-----------------------------------------------------------------
-                    Entity *addedHealthBar = world->add();
-                    addedHealthBar = healthBar[healthBar.size()-1]->getOwner();
-                    addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
+
+                    if (checkCollision(heart, cars[0]).second)
+                    {
+                        // add last health bar after collision with special color heart (green)
+                        Entity *addedHealthBar = world->add();
+                        addedHealthBar->parent = healthBar[healthBar.size() - 1]->getOwner()->parent;
+                        addedHealthBar->name = "healthbar";
+                        addedHealthBar->addComponent<MeshRendererComponent>();
+                        addedHealthBar->getComponent<MeshRendererComponent>()->mesh = healthBar[healthBar.size() - 1]->mesh;
+                        addedHealthBar->getComponent<MeshRendererComponent>()->material = healthBar[healthBar.size() - 1]->material;
+                        addedHealthBar->localTransform = healthBar[healthBar.size() - 1]->getOwner()->localTransform;
+                        addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
+                        //   remove heart after collision
+                        world->markForRemoval(heart->getOwner());
+                        world->deleteMarkedEntities();
+                    }
+                    else
+                    {
+                        //   remove heart after collision
+                        world->markForRemoval(heart->getOwner());
+                        world->deleteMarkedEntities();
+                        // remove last health bar after collision
+                        world->markForRemoval(healthBar[healthBar.size() - 1]->getOwner());
+                        world->deleteMarkedEntities();
+                        healthBar.pop_back();
+                    }
                 }
             }
 
