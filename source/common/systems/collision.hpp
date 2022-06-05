@@ -65,9 +65,7 @@ namespace our
                     this->healthBar.push_back(healthBar);
                 }
             }
-            cout << "BEFOR SORT" << endl;
             healthBar = sortHealthBars(healthBar);
-            cout << "AFTER SORT" << endl;
             // cout << cars.size() << " " << hearts.size() << endl;
             // cout << "before for" << endl;
             for (auto heart : hearts)
@@ -83,8 +81,14 @@ namespace our
                     // healthBar.pop_back();
                     // add last health bar after collision with special color heart
                     //-----------------------------------------------------------------
+
                     Entity *addedHealthBar = world->add();
-                    addedHealthBar = healthBar[healthBar.size()-1]->getOwner();
+                    addedHealthBar->parent = healthBar[healthBar.size() - 1]->getOwner()->parent;
+                    addedHealthBar->name = "healthbar";
+                    addedHealthBar->addComponent<MeshRendererComponent>();
+                    addedHealthBar->getComponent<MeshRendererComponent>()->mesh = healthBar[healthBar.size() - 1]->mesh;
+                    addedHealthBar->getComponent<MeshRendererComponent>()->material = healthBar[healthBar.size() - 1]->material;
+                    addedHealthBar->localTransform = healthBar[healthBar.size() - 1]->getOwner()->localTransform;
                     addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
                 }
             }
@@ -96,6 +100,7 @@ namespace our
         // sort based on x of position
         std::vector<MeshRendererComponent *> sortHealthBars(std::vector<MeshRendererComponent *> vec)
         {
+
             std::sort(vec.begin(), vec.end(), [](MeshRendererComponent *a, MeshRendererComponent *b)
                       { return a->getOwner()->localTransform.position.x < b->getOwner()->localTransform.position.x; });
             return vec;
