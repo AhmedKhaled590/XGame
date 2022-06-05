@@ -4,6 +4,7 @@
 #include "../components/camera.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../asset-loader.hpp"
+#include "../components/light.hpp"
 
 #include <glad/gl.h>
 #include <vector>
@@ -35,6 +36,7 @@ namespace our
         // We define them here (instead of being local to the "render" function) as an optimization to prevent reallocating them every frame
         std::vector<RenderCommand> opaqueCommands;
         std::vector<RenderCommand> transparentCommands;
+        std::vector<LightComponent *> lights; /*TODO_LIGHT*/
         // Objects used for rendering a skybox
         Mesh *skySphere;
         TexturedMaterial *skyMaterial;
@@ -50,7 +52,7 @@ namespace our
         // Clean up the renderer
         void destroy();
         // This function should be called every frame to draw the given world
-        void render(World *world, Application *app=nullptr);
+        void render(World *world, Application *app = nullptr);
     };
 
 }

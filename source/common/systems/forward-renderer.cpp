@@ -160,6 +160,10 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
+            } /*TODO_LIGHT*/
+            if (auto lightRenderer = entity->getComponent<LightComponent>(); lightRenderer)
+            {
+                lights.push_back(lightRenderer);
             }
         }
         if (score.size() > 7 && world->getEntities().size() > 4)
@@ -217,12 +221,48 @@ namespace our
 
         // TODO: (Req 8) Draw all the opaque commands
         //  Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-        for (auto command : opaqueCommands)
+        for (int i = 0; i < opaqueCommands.size(); i++)
         {
-            our::Material *material = command.material;
+
+            our::Material *material = opaqueCommands[i].material;
             material->setup();
-            material->shader->set("transform", VP * command.localToWorld);
-            command.mesh->draw();
+            material->shader->set("transform", VP * opaqueCommands[i].localToWorld);
+            /*TODO_LIGHT*/
+
+            material->shader->set("light_count", int(lights.size()));
+            std::string uni = "";
+            for (int j = 0; j < lights.size(); j++)
+            {
+                uni = "lights[" + std::to_string(j) + "].type";
+                material->shader->set(uni, lights[j]->lightType);
+                uni = "lights[" + std::to_string(j) + "].position";
+                material->shader->set(uni, glm::vec3(lights[j]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1)));
+                uni = "lights[" + std::to_string(j) + "].direction";
+                material->shader->set(uni, glm::vec3(lights[j]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0)));
+                uni = "lights[" + std::to_string(j) + "].diffuse";
+                material->shader->set(uni, lights[j]->diffuse);
+                uni = "lights[" + std::to_string(j) + "].specular";
+                material->shader->set(uni, lights[j]->specular);
+                uni = "lights[" + std::to_string(j) + "].attenuation";
+                material->shader->set(uni, lights[j]->attenuation);
+                uni = "lights[" + std::to_string(j) + "].cone_angles";
+                material->shader->set(uni, glm::vec2(glm::radians(lights[j]->cone_angles.x), glm::radians(lights[j]->cone_angles.y)));
+                uni = "lights[" + std::to_string(j) + "].ambient";
+                material->shader->set(uni, lights[j]->ambient);
+
+                glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
+                glm::mat4 M = opaqueCommands[i].localToWorld;
+                glm::mat4 M_I = glm::inverse(M);
+                glm::mat4 M_IT = glm::transpose(M_I);
+
+                material->shader->set("eye", glm::vec3(eye.x, eye.y, eye.z));
+                material->shader->set("VP", VP);
+                material->shader->set("M", M);
+                material->shader->set("M_I", M_I);
+                material->shader->set("M_IT", M_IT);
+            }
+
+            opaqueCommands[i].mesh->draw();
         }
 
         // If there is a sky material, draw the sky
@@ -255,14 +295,49 @@ namespace our
 
         // TODO: (Req 8) Draw all the transparent commands
         //  Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-        for (auto command : transparentCommands)
+        for (int i = 0; i < transparentCommands.size(); i++)
         {
-            // our::Material *material = command.material;
-            our::Material *material = command.material;
+            our::Material *material = transparentCommands[i].material;
+
             material->setup();
-            material->shader->set("transform", VP * command.localToWorld);
-            command.mesh->draw();
+            material->shader->set("transform", VP * transparentCommands[i].localToWorld);
+            /*TODO_LIGHT*/
+            glm::vec3 eye = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
+            glm::mat4 M = transparentCommands[i].localToWorld;
+            glm::mat4 M_I = glm::inverse(M);
+            glm::mat4 M_IT = glm::transpose(M_I);
+
+            material->shader->set("eye", eye);
+            material->shader->set("VP", VP);
+            material->shader->set("M", M);
+            material->shader->set("M_I", M_I);
+            material->shader->set("M_IT", M_IT);
+            material->shader->set("light_count", int(lights.size()));
+            std::string uni = "";
+
+            for (int j = 0; j < lights.size(); j++)
+            {
+
+                uni = "lights[" + std::to_string(j) + "].type";
+                material->shader->set(uni, lights[j]->lightType);
+                uni = "lights[" + std::to_string(j) + "].position";
+                material->shader->set(uni, glm::vec4(0, 0, 0, 0) * lights[j]->getOwner()->getLocalToWorldMatrix());
+                uni = "lights[" + std::to_string(j) + "].direction";
+                material->shader->set(uni, glm::vec4(0, -1, 0, 0) * lights[j]->getOwner()->getLocalToWorldMatrix());
+                uni = "lights[" + std::to_string(j) + "].diffuse";
+                material->shader->set(uni, lights[j]->diffuse);
+                uni = "lights[" + std::to_string(j) + "].specular";
+                material->shader->set(uni, lights[j]->specular);
+                uni = "lights[" + std::to_string(j) + "].attenuation";
+                material->shader->set(uni, lights[j]->attenuation);
+                uni = "lights[" + std::to_string(j) + "].cone_angles";
+                material->shader->set(uni, lights[j]->cone_angles);
+                uni = "lights[" + std::to_string(j) + "].ambient";
+                material->shader->set(uni, lights[j]->ambient);
+            }
+            transparentCommands[i].mesh->draw();
         }
+
         // If there is a postprocess material, apply postprocessing
         if (postprocessMaterial)
         {
