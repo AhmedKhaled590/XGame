@@ -12,6 +12,8 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <iostream>
+
+
 namespace our
 {
 
@@ -73,87 +75,10 @@ namespace our
             //----------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------
-            // ColliderComponent *car = nullptr;
-            // std::vector<ColliderComponent *> hearts;
-            // for (auto entity : world->getEntities())
-            // {
-            //     if (entity->name == "car")
-            //     {
-            //         car = entity->getComponent<ColliderComponent>();
-            //     }
-            //     else if (entity->name == "heart")
-            //     {
-            //         hearts.push_back(entity->getComponent<ColliderComponent>());
-            //     }
-            // }
-            // for (auto heart : hearts)
-            // {
-            //     if (checkCollision(car, heart))
-            //     {
-            //         std::cout << "collision" << std::endl;
-            //         std::cout << "collision" << std::endl;
-            //         std::cout << "collision" << std::endl;
-            //     }
-            // }
-            //----------------------------------------------------------------------------------
-            //----------------------------------------------------------------------------------
-            //----------------------------------------------------------------------------------
-            // // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
-            // if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
-            //     app->getMouse().lockMouse(app->getWindow());
-            //     mouse_locked = true;
-            // // If the left mouse button is released, we unlock and unhide the mouse.
-            // } else if(!app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && mouse_locked) {
-            //     app->getMouse().unlockMouse(app->getWindow());
-            //     mouse_locked = false;
-            // }
+         
 
-            // // We get a reference to the entity's position and rotation
-            // glm::vec3& position = entity->localTransform.position;
-            // glm::vec3& rotation = entity->localTransform.rotation;
 
-            // // If the left mouse button is pressed, we get the change in the mouse location
-            // // and use it to update the camera rotation
-            // if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){
-            //     glm::vec2 delta = app->getMouse().getMouseDelta();
-            //     rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
-            //     rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
-            // }
-
-            // // We prevent the pitch from exceeding a certain angle from the XZ plane to prevent gimbal locks
-            // if(rotation.x < -glm::half_pi<float>() * 0.99f) rotation.x = -glm::half_pi<float>() * 0.99f;
-            // if(rotation.x >  glm::half_pi<float>() * 0.99f) rotation.x  = glm::half_pi<float>() * 0.99f;
-            // // This is not necessary, but whenever the rotation goes outside the 0 to 2*PI range, we wrap it back inside.
-            // // This could prevent floating point error if the player rotates in single direction for an extremely long time.
-            // rotation.y = glm::wrapAngle(rotation.y);
-
-            // // We update the camera fov based on the mouse wheel scrolling amount
-            // float fov = camera->fovY + app->getMouse().getScrollOffset().y * controller->fovSensitivity;
-            // fov = glm::clamp(fov, glm::pi<float>() * 0.01f, glm::pi<float>() * 0.99f); // We keep the fov in the range 0.01*PI to 0.99*PI
-            // camera->fovY = fov;
-
-            // // We get the camera model matrix (relative to its parent) to compute the front, up and right directions
-            // glm::mat4 matrix = entity->localTransform.toMat4();
-
-            // glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -1, 0)),
-            //           up = glm::vec3(matrix * glm::vec4(0, 1, 0, 0)),
-            //           right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
-
-            // glm::vec3 current_sensitivity = controller->positionSensitivity;
-            // // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
-            // if(app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT)) current_sensitivity *= controller->speedupFactor;
-
-            // // We change the camera position based on the keys WASD/QE
-            // // S & W moves the player back and forth
-            // if(app->getKeyboard().isPressed(GLFW_KEY_W)) position += front * (deltaTime * current_sensitivity.z);
-            // if(app->getKeyboard().isPressed(GLFW_KEY_S)) position -= front * (deltaTime * current_sensitivity.z);
-            // // Q & E moves the player up and down
-            // if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
-            // if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
-            // // A & D moves the player left or right
-            // if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
-            // if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
-
+            // AMMAR : UP KEY Increases the speed until it reaches max speed
             if (app->getKeyboard().isPressed(GLFW_KEY_UP))
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->speedSensitivity));
@@ -162,12 +87,15 @@ namespace our
                     controller->linearVelocity[2] = controller->maxSpeed;
                 }
             }
-            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
+            // AMMAR : Down KEY decreases the speed until it reaches 0 with brake sensitivity
+            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN)) 
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->brakeSensitivity));
                 if (controller->linearVelocity[2] > 0)
                     controller->linearVelocity[2] = 0;
             }
+
+            // AMMAR : If speed button is not pressed decrease speed with friction sensitivity until zero 
             else if (controller->linearVelocity[2] != 0)
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->frictionSensitivity));
@@ -177,25 +105,27 @@ namespace our
                 }
             }
 
+            // AMMAR : left button moves the car left with the speed of the car 
             if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
             {
-                // controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
                 controller->linearVelocity[0] = controller->linearVelocity[2];
             }
+
+            // AMMAR : right button moves the car right with the speed of the car 
             else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
-                // controller->linearVelocity = glm::vec3(controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
                 controller->linearVelocity[0] = -1 * controller->linearVelocity[2];
-                ;
             }
+
+            // AMMAR : return x speed to zero if no left or right pressed 
             else
             {
                 controller->linearVelocity[0] = 0;
             }
 
+            // AMMAR :Space Button triggers jump if it is not currently jumping and starts it with giving Y a starting speed
             if (app->getKeyboard().isPressed(GLFW_KEY_SPACE))
             {
-                // controller->linearVelocity = glm::vec3(-1*controller->linearVelocity[2]*cos(controller->rotationSensitivity), controller->linearVelocity[1], controller->linearVelocity[2]*sin(controller->rotationSensitivity));
                 if (!isJump)
                 {
                     controller->linearVelocity[1] = controller->jumpSpeed;
@@ -203,6 +133,7 @@ namespace our
                 }
             }
 
+            // AMMAR :During jump state the Y speed keeps decreasing with jump sensitivity until it reaches negative jump speed and makes sure the car return to its original Y
             if (isJump)
             {
                 if (controller->linearVelocity[1] > -1 * controller->jumpSpeed)
