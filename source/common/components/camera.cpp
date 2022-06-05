@@ -31,8 +31,7 @@ namespace our
     {
         auto owner = getOwner();
         auto M = owner->getLocalToWorldMatrix();
-
-        // DONE: (Req 7)  Complete this function
+        // TODO: (Req 7) Complete this function
         // HINT:
         //  In the camera space:
         //  - eye is the origin (0,0,0)
@@ -44,12 +43,13 @@ namespace our
         //  - the center position which is the point (0,0,-1) but after being transformed by M
         //  - the up direction which is the vector (0,1,0) but after being transformed by M
         //  then you can use glm::lookAt
-        glm::vec3 eye = glm::vec3(0, 0, 0);
-        glm::vec3 center = glm::vec3(0, 0, -1);
-        glm::vec3 up = glm::vec3(0, 1, 0);
-        glm::vec3 eyePos = glm::vec3(M * glm::vec4(eye, 1));
-        glm::vec3 centerPos = glm::vec3(M * glm::vec4(center, 1));
-        glm::vec3 upDir = glm::vec3(M * glm::vec4(up, 0));
+        glm::vec4 eye = glm::vec4(0, 0, 0, 1);
+        glm::vec4 center = glm::vec4(0, 0, -1, 1);
+        glm::vec4 up = glm::vec4(0, 1, 0, 0);
+
+        glm::vec3 eyePos = M * eye;
+        glm::vec3 centerPos = M * center;
+        glm::vec3 upDir = M * up;
         return glm::lookAt(eyePos, centerPos, upDir);
     }
 
@@ -69,14 +69,21 @@ namespace our
         //  - The fovY is stored in the CameraComponent
         //  - The orthoHeight is stored in the CameraComponent
         //  - The camera type is stored in the CameraComponent
-        float aspectRatio = viewportSize.x / viewportSize.y;
-        if (cameraType == CameraType::PERSPECTIVE)
+
+        float aspect_ratio = static_cast<float>(viewportSize.x) / viewportSize.y;
+        glm::mat4 orthoprojection = glm::ortho(-(orthoHeight / 2) * aspect_ratio, (orthoHeight / 2) * aspect_ratio, -orthoHeight / 2, orthoHeight / 2, near, far);
+        glm::mat4 perspectiveprojection = glm::perspective(
+            fovY,
+            aspect_ratio,
+            near,
+            far);
+        if (cameraType == CameraType::ORTHOGRAPHIC)
         {
-            return glm::perspective(fovY, aspectRatio, near, far);
+            return orthoprojection;
         }
         else
         {
-            return glm::ortho((-orthoHeight / 2) * aspectRatio, (orthoHeight / 2) * aspectRatio, -orthoHeight / 2, orthoHeight / 2);
+            return perspectiveprojection;
         }
     }
 }
