@@ -38,11 +38,14 @@
                 "text": "assets/textures/menutext.jpg",
                 "healthbar": "assets/textures/healthbar.png",
                 /*TODO_LIGHT*/
-                "monkey": "assets/textures/car/Tex_0001_0.png",
-                "monkey-specular": "assets/textures/car/Tex_0002_1.png",
-                "monkey-roughness": "assets/textures/car/Tex_0003_0.png",
-                "monkey-ambient_occlusion": "assets/textures/car/Tex_0004_1.png",
-                "monkey-emissive": "assets/textures/car/Tex_0005_0.png"
+                "monkey": "assets/textures/monkey.png",
+                "albedo": "assets/textures/monkey/albedo.jpg",
+                "specular": "assets/textures/monkey/specular.jpg",
+                "roughness": "assets/textures/monkey/roughness.jpg",
+                "ambient_occlusion": "assets/textures/monkey/ambient_occlusion.jpg",
+                "emissive": "assets/textures/monkey/emissive.jpg",
+                "black":"assets/textures/black.jpg",
+                "white":"assets/textures/white.jpg"
 
             },  
             "meshes":{
@@ -79,12 +82,13 @@
                     "transparent": false,
                     "tint": [1, 1,1, 1],
                      /*TODO_LIGHT*/
-                     "albedo": "monkey",
-                     "specular": "monkey-specular",
-                     "roughness": "monkey-roughness",
-                     "ambient_occlusion": "monkey-ambient_occlusion",
-                     "emissive": "monkey-emissive",
-                    "sampler": "default"
+                     "albedo": "albedo",
+                     "specular": "specular",
+                     "roughness": "roughness",
+                     "ambient_occlusion": "white",
+                     "emissive": "black",
+     
+                     "sampler": "default"
                 },
                "health":{
                 "type": "textured",
@@ -309,49 +313,23 @@
                   ]
                 }
               ]
-            },
-            {
-              "position": [
-                  0,
-                  10,
-                  0
-              ],
-              "rotation": [
-                  0,
-                  180,
-                  180
-              ],
+            }
+            ,{  "name":"light",
+              "position": [0, 10, 0],
+              "rotation": [0, 0, 0],
               "components": [
                   {
                       "type": "Light",
                       "lightType": 1,
-                      "attenuation": [
-                          0,
-                          0,
-                          1
-                      ],
-                      "cone_angles": [
-                          10,
-                          11
-                      ],
-                      "diffuse": [
-                          1,
-                          0,
-                          0
-                      ],
-                      "specular": [
-                          0.1,
-                          0.1,
-                          0.1
-                      ],
-                      "ambient": [
-                          0.1,
-                          0.1,
-                          0.1
-                      ]
+                      "attenuation": [0, 0.1, 0],
+                      "cone_angles":[0, 10],
+                      "diffuse": [0,0,1],
+                      "specular": [0,0,1],
+                      "ambient": [0.1,0,0]
                   }
               ]
-          },  
+          }
+          ,  
             {
                 "position": [0, -1, 0],
                 "rotation": [-90, -90, 0],
