@@ -32,29 +32,25 @@ namespace our
                 MovementComponent* movement = entity->getComponent<MovementComponent>();
                 // If the movement component exists
                 if(movement){
-
+                    // Ammar: Normal movement objects if not car
                     if (entity->name != "car")
                     {
                         entity->localTransform.position += deltaTime * movement->linearVelocity;
                         entity->localTransform.rotation += deltaTime * movement->angularVelocity;
                     }
+
+                    // Ammar: if the object is car it only rotates 45 degrees left and right 
                     else
-                   {
+                    {
                         if(app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                         {
-                            // movement->angularVelocity = glm::vec3(0, movement->rotationSensitivity, 0);
-                            // entity->localTransform.rotation += deltaTime * movement->angularVelocity;
-                            // if(entity->localTransform.rotation[1]<(180-45)*(22/7)/180)
-                            //     entity->localTransform.rotation[1]=(180-45)*(22/7)/180;
+
                             entity->localTransform.rotation[1]=(180+45)*(22/7.0)/180.0;
                             
                         }
                         else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                         {
-                            // movement->angularVelocity = glm::vec3(0, -1*movement->rotationSensitivity, 0);
-                            // entity->localTransform.rotation += deltaTime * movement->angularVelocity;
-                            // if(entity->localTransform.rotation[1]>(180+45)*(22/7)/180)
-                            //     entity->localTransform.rotation[1]=(180+45)*(22/7)/180;
+
                             entity->localTransform.rotation[1]=(180-45)*(22/7.0)/180.0;
 
                         }
