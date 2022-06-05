@@ -34,6 +34,7 @@ namespace our
         bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
         {
             Entity *entity = car->getOwner();
+            entity-
             glm::vec3 carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             entity = heart->getOwner();
             glm::vec3 heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
