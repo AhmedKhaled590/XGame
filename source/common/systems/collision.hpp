@@ -24,7 +24,7 @@ namespace our
 
             auto car = carComponent->getOwner();
             auto heart = heartComponent->getOwner();
-         
+
             glm::vec3 carCenter = carComponent->position + glm::vec3(car->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             glm::vec3 heartCenter = heartComponent->position + glm::vec3(heart->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             glm::vec3 heartLengths = glm::vec3(heartComponent->length, heartComponent->length, heartComponent->length) * heart->localTransform.scale;
