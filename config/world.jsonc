@@ -38,11 +38,11 @@
                 "text": "assets/textures/menutext.jpg",
                 "healthbar": "assets/textures/healthbar.png",
                 /*TODO_LIGHT*/
-                "monkey": "assets/textures/monkey/albedo.jpg",
-                "monkey-specular": "assets/textures/monkey/specular.jpg",
-                "monkey-roughness": "assets/textures/monkey/roughness.jpg",
-                "monkey-ambient_occlusion": "assets/textures/monkey/ambient_occlusion.jpg",
-                "monkey-emissive": "assets/textures/monkey/emissive.jpg"
+                "monkey": "assets/textures/car/Tex_0001_0.png",
+                "monkey-specular": "assets/textures/car/Tex_0002_1.png",
+                "monkey-roughness": "assets/textures/car/Tex_0003_0.png",
+                "monkey-ambient_occlusion": "assets/textures/car/Tex_0004_1.png",
+                "monkey-emissive": "assets/textures/car/Tex_0005_0.png"
 
             },  
             "meshes":{
@@ -84,7 +84,7 @@
                      "roughness": "monkey-roughness",
                      "ambient_occlusion": "monkey-ambient_occlusion",
                      "emissive": "monkey-emissive",
-                    "sampler": "pixelated"
+                    "sampler": "default"
                 },
                "health":{
                 "type": "textured",
