@@ -204,9 +204,7 @@
             "name": "car",
             "components": [
               { "type": "Mesh Renderer", "mesh": "car", "material": "car" },
-              {
-                "type": "Collider"
-              },
+              { "type": "Collider", "position": [0, 0, 0], "length": 1.8 },
               {
                 "type": "Movement",
                 "linearVelocity": [0, 0, 0],
@@ -297,9 +295,7 @@
         "name": "heart",
         "components": [
           { "type": "Mesh Renderer", "mesh": "heart", "material": "black" },
-          {
-            "type": "Collider"
-          },
+          { "type": "Collider", "position": [0, 0, 0], "length": 1.8 },
           {
             "type": "Movement",
             "angularVelocity": [0, 90, 0]
