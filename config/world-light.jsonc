@@ -244,12 +244,12 @@
                 "angularVelocity": [0, 0, 0],
                 "speedSensitivity": -0.5, 
                 "brakeSensitivity":0.5,
-                "maxSpeed":-15,
+                "maxSpeed":-10,
                 "frictionSensitivity":0.1,
 
                 "rotationSensitivity": 2,
                 "maxRotationAngle": 0.785,
-                "jumpSensitivity": 2,
+                "jumpSensitivity": 10,
                 "jumpSpeed":20,
                 "originalY":2
               }

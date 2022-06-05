@@ -203,7 +203,7 @@
 
                 "rotationSensitivity": 2,
                 "maxRotationAngle": 0.785,
-                "jumpSensitivity": 2,
+                "jumpSensitivity": 1,
                 "jumpSpeed":20,
                 "originalY":2
               }
