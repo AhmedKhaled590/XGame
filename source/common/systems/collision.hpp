@@ -16,6 +16,7 @@ namespace our
     class CollisionSystem
     {
         std::vector<ColliderComponent *> cars, hearts;
+        std::vector<MeshRendererComponent *> healthBar;
 
     public:
         // cube-->heart,bullet-->car
@@ -38,12 +39,13 @@ namespace our
             float carRadius = carComponent->length * glm::length(car->localTransform.scale);
             return glm::length(difference) < carRadius;
         }
-        bool update(World *world, float deltaTime)
+        int update(World *world, float deltaTime)
         {
             // cout << "update collision" << endl;
             // cout << cars.size() << " " << hearts.size() << endl;
             hearts.clear();
             cars.clear();
+            healthBar.clear();
             for (const auto &entity : world->getEntities())
             {
                 if (entity->name == "heart")
@@ -57,21 +59,46 @@ namespace our
                     auto car = entity->getComponent<ColliderComponent>();
                     cars.push_back(car);
                 }
+                else if (entity->name == "healthbar")
+                {
+                    auto healthBar = entity->getComponent<MeshRendererComponent>();
+                    this->healthBar.push_back(healthBar);
+                }
             }
+            cout << "BEFOR SORT" << endl;
+            healthBar = sortHealthBars(healthBar);
+            cout << "AFTER SORT" << endl;
             // cout << cars.size() << " " << hearts.size() << endl;
             // cout << "before for" << endl;
             for (auto heart : hearts)
             {
                 if (checkCollision(heart, cars[0]))
                 {
-                    cout << "collision" << endl;
+                    // //remove heart after collision
+                    // world->markForRemoval(heart->getOwner());
+                    // world->deleteMarkedEntities();
+                    // //remove last health bar after collision
+                    // world->markForRemoval(healthBar[healthBar.size() - 1]->getOwner());
+                    // world->deleteMarkedEntities();
+                    // healthBar.pop_back();
+                    // add last health bar after collision with special color heart
+                    //-----------------------------------------------------------------
+                    Entity *addedHealthBar = world->add();
+                    addedHealthBar = healthBar[healthBar.size()-1]->getOwner();
+                    addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
                 }
-                // cout << "in for" << endl;
             }
 
             // world->deleteMarkedEntities();
 
-            return hearts.empty();
+            return healthBar.size();
+        }
+        // sort based on x of position
+        std::vector<MeshRendererComponent *> sortHealthBars(std::vector<MeshRendererComponent *> vec)
+        {
+            std::sort(vec.begin(), vec.end(), [](MeshRendererComponent *a, MeshRendererComponent *b)
+                      { return a->getOwner()->localTransform.position.x < b->getOwner()->localTransform.position.x; });
+            return vec;
         }
     };
 }

@@ -50,10 +50,10 @@ class Playstate : public our::State
 
         cameraController.update(&world, (float)deltaTime);
         // cout << "before collision" << endl;
-        bool won = collisionSystem.update(&world, (float)deltaTime);
+        int size = collisionSystem.update(&world, (float)deltaTime);
         // cout << "after collision" << endl;
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world,getApp());
+        renderer.render(&world, getApp());
     }
 
     void onDestroy() override
