@@ -20,21 +20,21 @@ namespace our
             entity->deserialize(entityData);
 
             // AhmedKhaled5
-            if (entity->name == "road")
-            {
-                for (int i = 0; i < 2000; i++)
-                {
-                    Entity *child = add();
-                    child->parent = parent;
-                    child->deserialize(entityData);
-                    child->localTransform.position.z = i * -1 * 10;
-                }
-            }
+            // if (entity->name == "road")
+            // {
+            //     for (int i = 0; i < 2000; i++)
+            //     {
+            //         Entity *child = add();
+            //         child->parent = parent;
+            //         child->deserialize(entityData);
+            //         child->localTransform.position.z = i * -1 * 10;
+            //     }
+            // }
             if (entity->name == "heart")
             {
                 // generate random positions for the hearts with a random color
                 string colors[] = {"red", "green", "blue", "green", "black", "white", "black", "red", "black", "black", "white", "green"};
-                for (int i = 0; i < 2000; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     Entity *child = add();
                     child->parent = parent;

@@ -117,7 +117,6 @@ namespace our
             }
 
             // world->deleteMarkedEntities();
-
             return healthBar.size();
         }
         // sort based on x of position

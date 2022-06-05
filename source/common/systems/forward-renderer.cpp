@@ -172,7 +172,7 @@ namespace our
             ImGui::Text("You Win!");
         }
 
-        if (score.size() <= 0 && world->getEntities().size() > 4)
+        if (score.size() <= 1 && world->getEntities().size() > 4)
         {
             ImGui::Text("You Lose!");
         }
