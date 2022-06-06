@@ -51,8 +51,7 @@ class Playstate : public our::State
         cameraController.update(&world, (float)deltaTime);
         // cout << "before collision" << endl;
         int size = collisionSystem.update(&world, (float)deltaTime);
-        // change state when size ==0
-
+        
         // cout << "after collision" << endl;
         // And finally we use the renderer system to draw the scene
         renderer.render(&world, getApp());
@@ -64,6 +63,7 @@ class Playstate : public our::State
         renderer.destroy();
         // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
         cameraController.exit();
+
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
     }
