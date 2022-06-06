@@ -133,19 +133,19 @@ namespace our
             // AMMAR :During jump state the Y speed keeps decreasing with jump sensitivity until it reaches negative jump speed and makes sure the car return to its original Y
             if (isJump)
             {
-                if (controller->linearVelocity[1] > -1 * controller->jumpSpeed)
-                {
-                    controller->linearVelocity[1] += (-1 * controller->jumpSensitivity);
-                }
-                else
-                {
-                    controller->linearVelocity[1] = 0;
-                    entity->localTransform.position[1] = controller->originalY;
-                    isJump = false;
-                }
+                controller->linearVelocity[1] += (-1 * controller->jumpSensitivity);
             }
 
             entity->localTransform.position += deltaTime * controller->linearVelocity;
+            if (isJump && entity->localTransform.position[1] <= controller->originalY)
+            {
+                controller->linearVelocity[1] = 0;
+                entity->localTransform.position[1] = controller->originalY;
+                isJump = false;
+            }
+
+
+            ///Handling Road width
             if (entity->localTransform.position.x < -9)
             {
                 entity->localTransform.position.x = -9;
