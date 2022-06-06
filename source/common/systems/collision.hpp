@@ -20,6 +20,8 @@ namespace our
 
     public:
         // NOTE: HazemAbdo3.1 function checkCollision()
+        // AABB Axis Aligned Bounding Box
+        // AABB - Circle collision [heart-AABB car-circle]
         // return pair of two flags
         // first flag indicates whether the collision happened [1-->collision happened, 0-->no collision]
         // second flag indicates whether the collision happened with a heart that will increase the health
@@ -29,16 +31,21 @@ namespace our
             pair<bool, bool> result = make_pair(false, false);
             auto car = carComponent->getOwner();
             auto heart = heartComponent->getOwner();
+            // get centers and difference between centers
             glm::vec3 carCenter = carComponent->position + glm::vec3(car->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
             glm::vec3 heartCenter = heartComponent->position + glm::vec3(heart->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            glm::vec3 heartLengths = glm::vec3(heartComponent->length, heartComponent->length, heartComponent->length) * heart->localTransform.scale;
             glm::vec3 difference = carCenter - heartCenter;
-            // min(max(x, minVal), maxVal)
+            glm::vec3 heartLengths = glm::vec3(heartComponent->length, heartComponent->length, heartComponent->length) * heart->localTransform.scale;
+            // clamp(value,min,max)
+            // max(min, min(max, value))
             glm::vec3 clampedDifference = glm::clamp(difference, heartLengths * glm::vec3(-1.0f, -1.0f, -1.0f), heartLengths);
+            // closest point from the heart to the car
             glm::vec3 heartPoint = heartCenter + clampedDifference;
+            // diff=closest point from the heart to the car-center of the car
             difference = heartPoint - carCenter;
             float carRadius = carComponent->length * glm::length(car->localTransform.scale);
             result.first = glm::length(difference) < carRadius;
+            //--------------------------------------------------------------------------
             // the only heart that will increase the health is the green heart
             if (heart->getComponent<MeshRendererComponent>()->material == AssetLoader<Material>::get("green"))
             {
@@ -54,7 +61,7 @@ namespace our
         int update(World *world, float deltaTime)
         {
             // cout << "update collision" << endl;
-            // cout << cars.size() << " " << hearts.size() << endl;
+            // cout << healthBar.size() << endl;
             hearts.clear();
             cars.clear();
             healthBar.clear();
@@ -78,6 +85,7 @@ namespace our
                 }
             }
             // cout << "BEFOR SORT" << endl;
+            // to sort the healthBars due to their x position
             healthBar = sortHealthBars(healthBar);
             // cout << "AFTER SORT" << endl;
             // cout << cars.size() << " " << hearts.size() << endl;
@@ -88,34 +96,22 @@ namespace our
                 if (checkCollision(heart, cars[0]).first)
                 {
 
-                    if (checkCollision(heart, cars[0]).second && healthBar.size() > 0)
+                    if (checkCollision(heart, cars[0]).second)
                     {
-                        // add last health bar after collision with special color heart (green)
-                        Entity *addedHealthBar = world->add();
-                        addedHealthBar->parent = healthBar[healthBar.size() - 1]->getOwner()->parent;
-                        addedHealthBar->name = "healthbar";
-                        addedHealthBar->addComponent<MeshRendererComponent>();
-                        addedHealthBar->getComponent<MeshRendererComponent>()->mesh = healthBar[healthBar.size() - 1]->mesh;
-                        addedHealthBar->getComponent<MeshRendererComponent>()->material = healthBar[healthBar.size() - 1]->material;
-                        addedHealthBar->localTransform = healthBar[healthBar.size() - 1]->getOwner()->localTransform;
-                        addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
+                        addHealthBar(world);
                         //   remove heart after collision
                         world->markForRemoval(heart->getOwner());
                         world->deleteMarkedEntities();
                     }
-                    else
+                    else if (healthBar.size() > 0)
                     {
+                        removeHealthBar(world);
                         //   remove heart after collision
                         world->markForRemoval(heart->getOwner());
                         world->deleteMarkedEntities();
-                        // remove last health bar after collision
-                        world->markForRemoval(healthBar[healthBar.size() - 1]->getOwner());
-                        world->deleteMarkedEntities();
-                        healthBar.pop_back();
                     }
                 }
             }
-
             // world->deleteMarkedEntities();
             return healthBar.size();
         }
@@ -126,6 +122,27 @@ namespace our
             std::sort(vec.begin(), vec.end(), [](MeshRendererComponent *a, MeshRendererComponent *b)
                       { return a->getOwner()->localTransform.position.x < b->getOwner()->localTransform.position.x; });
             return vec;
+        }
+        void addHealthBar(World *world)
+        {
+            // add last health bar after collision with special color heart (green)
+            Entity *addedHealthBar = world->add();
+            addedHealthBar->parent = healthBar[healthBar.size() - 1]->getOwner()->parent;
+            addedHealthBar->name = "healthbar";
+            addedHealthBar->addComponent<MeshRendererComponent>();
+            addedHealthBar->getComponent<MeshRendererComponent>()->mesh = healthBar[healthBar.size() - 1]->mesh;
+            addedHealthBar->getComponent<MeshRendererComponent>()->material = healthBar[healthBar.size() - 1]->material;
+            addedHealthBar->localTransform = healthBar[healthBar.size() - 1]->getOwner()->localTransform;
+            addedHealthBar->localTransform.scale = {0.06, 0.04, 0.1};
+            addedHealthBar->localTransform.position.x = healthBar[healthBar.size() - 1]->getOwner()->localTransform.position.x + 0.15;
+            healthBar.push_back(addedHealthBar->getComponent<MeshRendererComponent>());
+        }
+        void removeHealthBar(World *world)
+        {
+            // remove last health bar after collision
+            world->markForRemoval(healthBar[healthBar.size() - 1]->getOwner());
+            world->deleteMarkedEntities();
+            healthBar.pop_back();
         }
     };
 }
