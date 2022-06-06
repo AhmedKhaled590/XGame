@@ -202,7 +202,7 @@
 
             "rotationSensitivity": 2,
             "maxRotationAngle": 0.785,
-            "jumpSensitivity": 2,
+            "jumpSensitivity": 1,
             "jumpSpeed": 20,
             "originalY": 2
           }
@@ -221,108 +221,7 @@
                 "linearVelocity": [0, 0, 0],
                 "angularVelocity": [0, 0, 0],
                 "rotationSensitivity": 2,
-                "maxRotationAngle": 0.785,
-                "jumpSensitivity": 1,
-                "jumpSpeed":20,
-                "originalY":2
-              }
-            ],
-            "children":[
-              {
-                "position": [0, -2, -3],
-                "rotation": [0, 180, 0],
-                "scale": [0.2, 0.2, 0.2],
-                "name":"car",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "car", "material": "car"
-                  },
-                  { "type": "Collider", "position": [0, 0, 0], "length": 1.8 },
-                  {
-                      "type": "Movement",
-                      "linearVelocity": [0, 0, 0],
-                      "angularVelocity": [0, 0, 0],
-                      "rotationSensitivity": 2,
-                      "maxRotationAngle": 0.785
-                  }
-                ]
-              },
-              {
-                "position": [-1.8, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-1.95, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-2.1, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-2.25, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-2.4, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-2.55, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
-              },
-              {
-                "position": [-2.7, 2.5, -3],
-                "rotation": [0, 0, 0],
-                "scale": [0.06, 0.04,0.1],
-                "name":"healthbar",
-                "components": [
-                  { "type": "Mesh Renderer",
-                    "mesh": "plane", "material": "red"
-                  }
-                ]
+                "maxRotationAngle": 0.785
               }
             ]
           },
