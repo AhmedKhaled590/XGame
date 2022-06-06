@@ -13,7 +13,6 @@
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <iostream>
 
-
 namespace our
 {
 
@@ -42,7 +41,7 @@ namespace our
         //     glm::vec3 heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
         //     bool collisionX = carPos.x + 1 >= heartPos.x &&
         //                       heartPos.x >= carPos.x;
-        //     // cout << "x" << endl;  
+        //     // cout << "x" << endl;
         //     // cout << carPos.x + 1.3 << " " << heartPos.x << endl;
         //     // cout << "y" << endl;
         //     // cout << carPos.y << " " << heartPos.y << endl;
@@ -75,8 +74,6 @@ namespace our
             //----------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------
-         
-
 
             // AMMAR : UP KEY Increases the speed until it reaches max speed
             if (app->getKeyboard().isPressed(GLFW_KEY_UP))
@@ -88,14 +85,14 @@ namespace our
                 }
             }
             // AMMAR : Down KEY decreases the speed until it reaches 0 with brake sensitivity
-            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN)) 
+            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->brakeSensitivity));
                 if (controller->linearVelocity[2] > 0)
                     controller->linearVelocity[2] = 0;
             }
 
-            // AMMAR : If speed button is not pressed decrease speed with friction sensitivity until zero 
+            // AMMAR : If speed button is not pressed decrease speed with friction sensitivity until zero
             else if (controller->linearVelocity[2] != 0)
             {
                 controller->linearVelocity += (glm::vec3(0, 0, controller->frictionSensitivity));
@@ -105,19 +102,19 @@ namespace our
                 }
             }
 
-            // AMMAR : left button moves the car left with the speed of the car 
+            // AMMAR : left button moves the car left with the speed of the car
             if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
             {
                 controller->linearVelocity[0] = controller->linearVelocity[2];
             }
 
-            // AMMAR : right button moves the car right with the speed of the car 
+            // AMMAR : right button moves the car right with the speed of the car
             else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
                 controller->linearVelocity[0] = -1 * controller->linearVelocity[2];
             }
 
-            // AMMAR : return x speed to zero if no left or right pressed 
+            // AMMAR : return x speed to zero if no left or right pressed
             else
             {
                 controller->linearVelocity[0] = 0;
