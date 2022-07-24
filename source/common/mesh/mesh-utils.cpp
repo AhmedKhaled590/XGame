@@ -83,7 +83,6 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
             }
         }
     }
-
     return new our::Mesh(vertices, elements);
 }
 

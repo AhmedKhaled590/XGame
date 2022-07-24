@@ -2,6 +2,8 @@
 
 #include <glad/gl.h>
 #include "vertex.hpp"
+#include <iostream>
+using namespace std;
 
 namespace our
 {
@@ -105,6 +107,28 @@ namespace our
                 GL_UNSIGNED_INT, // type
                 0);              // element array buffer offset
         }
+        // // get AABB of the mesh
+        // glm::vec4 getAABB(glm::mat4 modelMatrix)
+        // {
+        //     // iterate through all vertices and multiply them with the model matrix
+        //     // return the min and max of the vertices
+        //     glm::vec3 min = glm::vec3(999999, 999999, 999999);
+        //     glm::vec3 max = glm::vec3(-999999, -999999, -999999);
+        //     for (int i = 0; i < elementCount; i++)
+        //     {
+        //         glm::vec3 vertex = glm::vec3(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+        //         vertex = modelMatrix * glm::vec4(vertex, 1);
+        //         if (vertex.x < min.x)
+        //             min.x = vertex.x;
+        //         if (vertex.z < min.z)
+        //             min.z = vertex.z;
+        //         if (vertex.x > max.x)
+        //             max.x = vertex.x;
+        //         if (vertex.z > max.z)
+        //             max.z = vertex.z;
+        //     }
+        //     return glm::vec4(min.x, min.z, max.x, max.z);
+        // }
 
         // this function should delete the vertex & element buffers and the vertex array object
         ~Mesh()
@@ -118,5 +142,4 @@ namespace our
         Mesh(Mesh const &) = delete;
         Mesh &operator=(Mesh const &) = delete;
     };
-
 }

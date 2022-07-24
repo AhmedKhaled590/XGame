@@ -8,5 +8,8 @@ namespace our {
         if(!data.is_object()) return;
         linearVelocity = data.value("linearVelocity", linearVelocity);
         angularVelocity = glm::radians(data.value("angularVelocity", angularVelocity));
+        rotationSensitivity = data.value("rotationSensitivity", rotationSensitivity);
+        maxRotationAngle = data.value("maxRotationAngle", maxRotationAngle);
+
     }
 }

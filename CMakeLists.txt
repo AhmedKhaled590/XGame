@@ -78,11 +78,16 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/light.hpp
+        source/common/components/light.cpp
+        source/common/components/collider.hpp
+        source/common/components/collider.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+        source/common/systems/collision.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -93,6 +98,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        vendor/glut/include
 )
 
 
@@ -114,6 +120,6 @@ set(STATES_SOURCES
 
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
-# Then we link GLFW with each target
+# Then we link GLFW with each target    
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)

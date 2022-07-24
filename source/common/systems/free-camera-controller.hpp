@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+// #include "../components/collider.hpp"
 
 #include "../application.hpp"
 
@@ -10,104 +11,159 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
+#include <iostream>
 
 namespace our
 {
 
     // The free camera controller system is responsible for moving every entity which contains a FreeCameraControllerComponent.
-    // This system is added as a slightly complex example for how use the ECS framework to implement logic. 
+    // This system is added as a slightly complex example for how use the ECS framework to implement logic.
     // For more information, see "common/components/free-camera-controller.hpp"
-    class FreeCameraControllerSystem {
-        Application* app; // The application in which the state runs
+    class FreeCameraControllerSystem
+    {
+        Application *app;          // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
+        bool isJump = false;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
-        void enter(Application* app){
+
+        void enter(Application *app)
+        {
             this->app = app;
         }
-
-        // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
-        void update(World* world, float deltaTime) {
+        // bool checkCollision(MeshRendererComponent *car, MeshRendererComponent *heart)
+        // {
+        //     Entity *entity = car->getOwner();
+        //     entity -
+        //         glm::vec3 carPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        //     entity = heart->getOwner();
+        //     glm::vec3 heartPos = entity->localTransform.position + glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        //     bool collisionX = carPos.x + 1 >= heartPos.x &&
+        //                       heartPos.x >= carPos.x;
+        //     // cout << "x" << endl;
+        //     // cout << carPos.x + 1.3 << " " << heartPos.x << endl;
+        //     // cout << "y" << endl;
+        //     // cout << carPos.y << " " << heartPos.y << endl;
+        //     // cout << "z" << endl;
+        //     // cout << carPos.z + 3 << " " << heartPos.z << endl;
+        //     bool collisionZ = carPos.z + 3.3 >= heartPos.z &&
+        //                       heartPos.z >= carPos.z;
+        //     return collisionX && collisionZ;
+        // }
+        // // This should be called every frame to update all entities containing a FreeCameraControllerComponent
+        // This should be called every frame to update all entities containing a FreeCameraControllerComponent
+        void update(World *world, float deltaTime)
+        {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
-            CameraComponent* camera = nullptr;
+            CameraComponent *camera = nullptr;
             FreeCameraControllerComponent *controller = nullptr;
-            for(auto entity : world->getEntities()){
+            for (auto entity : world->getEntities())
+            {
                 camera = entity->getComponent<CameraComponent>();
                 controller = entity->getComponent<FreeCameraControllerComponent>();
-                if(camera && controller) break;
+                if (camera && controller)
+                    break;
             }
             // If there is no entity with both a CameraComponent and a FreeCameraControllerComponent, we can do nothing so we return
-            if(!(camera && controller)) return;
+            if (!(camera && controller))
+                return;
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
-            Entity* entity = camera->getOwner();
+            Entity *entity = camera->getOwner();
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------
 
-            // If the left mouse button is pressed, we lock and hide the mouse. This common in First Person Games.
-            if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && !mouse_locked){
-                app->getMouse().lockMouse(app->getWindow());
-                mouse_locked = true;
-            // If the left mouse button is released, we unlock and unhide the mouse.
-            } else if(!app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1) && mouse_locked) {
-                app->getMouse().unlockMouse(app->getWindow());
-                mouse_locked = false;
+            // AMMAR : UP KEY Increases the speed until it reaches max speed
+            if (app->getKeyboard().isPressed(GLFW_KEY_UP))
+            {
+                controller->linearVelocity += (glm::vec3(0, 0, controller->speedSensitivity));
+                if (controller->linearVelocity[2] < controller->maxSpeed)
+                {
+                    controller->linearVelocity[2] = controller->maxSpeed;
+                }
+            }
+            // AMMAR : Down KEY decreases the speed until it reaches 0 with brake sensitivity
+            else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
+            {
+                controller->linearVelocity += (glm::vec3(0, 0, controller->brakeSensitivity));
+                if (controller->linearVelocity[2] > 0)
+                    controller->linearVelocity[2] = 0;
             }
 
-            // We get a reference to the entity's position and rotation
-            glm::vec3& position = entity->localTransform.position;
-            glm::vec3& rotation = entity->localTransform.rotation;
-
-            // If the left mouse button is pressed, we get the change in the mouse location
-            // and use it to update the camera rotation
-            if(app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1)){
-                glm::vec2 delta = app->getMouse().getMouseDelta();
-                rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
-                rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
+            // AMMAR : If speed button is not pressed decrease speed with friction sensitivity until zero
+            else if (controller->linearVelocity[2] != 0)
+            {
+                controller->linearVelocity += (glm::vec3(0, 0, controller->frictionSensitivity));
+                if (controller->linearVelocity[2] > 0)
+                {
+                    controller->linearVelocity[2] = 0;
+                }
             }
 
-            // We prevent the pitch from exceeding a certain angle from the XZ plane to prevent gimbal locks
-            if(rotation.x < -glm::half_pi<float>() * 0.99f) rotation.x = -glm::half_pi<float>() * 0.99f;
-            if(rotation.x >  glm::half_pi<float>() * 0.99f) rotation.x  = glm::half_pi<float>() * 0.99f;
-            // This is not necessary, but whenever the rotation goes outside the 0 to 2*PI range, we wrap it back inside.
-            // This could prevent floating point error if the player rotates in single direction for an extremely long time. 
-            rotation.y = glm::wrapAngle(rotation.y);
+            // AMMAR : left button moves the car left with the speed of the car
+            if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
+            {
+                controller->linearVelocity[0] = controller->linearVelocity[2];
+            }
 
-            // We update the camera fov based on the mouse wheel scrolling amount
-            float fov = camera->fovY + app->getMouse().getScrollOffset().y * controller->fovSensitivity;
-            fov = glm::clamp(fov, glm::pi<float>() * 0.01f, glm::pi<float>() * 0.99f); // We keep the fov in the range 0.01*PI to 0.99*PI
-            camera->fovY = fov;
+            // AMMAR : right button moves the car right with the speed of the car
+            else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+            {
+                controller->linearVelocity[0] = -1 * controller->linearVelocity[2];
+            }
 
-            // We get the camera model matrix (relative to its parent) to compute the front, up and right directions
-            glm::mat4 matrix = entity->localTransform.toMat4();
+            // AMMAR : return x speed to zero if no left or right pressed
+            else
+            {
+                controller->linearVelocity[0] = 0;
+            }
 
-            glm::vec3 front = glm::vec3(matrix * glm::vec4(0, 0, -1, 0)),
-                      up = glm::vec3(matrix * glm::vec4(0, 1, 0, 0)), 
-                      right = glm::vec3(matrix * glm::vec4(1, 0, 0, 0));
+            // AMMAR :Space Button triggers jump if it is not currently jumping and starts it with giving Y a starting speed
+            if (app->getKeyboard().isPressed(GLFW_KEY_SPACE))
+            {
+                if (!isJump)
+                {
+                    controller->linearVelocity[1] = controller->jumpSpeed;
+                    isJump = true;
+                }
+            }
 
-            glm::vec3 current_sensitivity = controller->positionSensitivity;
-            // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
-            if(app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT)) current_sensitivity *= controller->speedupFactor;
+            // AMMAR :During jump state the Y speed keeps decreasing with jump sensitivity until it reaches negative jump speed and makes sure the car return to its original Y
+            if (isJump)
+            {
+                controller->linearVelocity[1] += (-1 * controller->jumpSensitivity);
+            }
 
-            // We change the camera position based on the keys WASD/QE
-            // S & W moves the player back and forth
-            if(app->getKeyboard().isPressed(GLFW_KEY_W)) position += front * (deltaTime * current_sensitivity.z);
-            if(app->getKeyboard().isPressed(GLFW_KEY_S)) position -= front * (deltaTime * current_sensitivity.z);
-            // Q & E moves the player up and down
-            if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
-            if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
-            // A & D moves the player left or right 
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
+            entity->localTransform.position += deltaTime * controller->linearVelocity;
+            if (isJump && entity->localTransform.position[1] <= controller->originalY)
+            {
+                controller->linearVelocity[1] = 0;
+                entity->localTransform.position[1] = controller->originalY;
+                isJump = false;
+            }
+
+
+            ///Handling Road width
+            if (entity->localTransform.position.x < -9)
+            {
+                entity->localTransform.position.x = -9;
+            }
+            if (entity->localTransform.position.x > 9)
+            {
+                entity->localTransform.position.x = 9;
+            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
-        void exit(){
-            if(mouse_locked) {
+        void exit()
+        {
+            if (mouse_locked)
+            {
                 mouse_locked = false;
                 app->getMouse().unlockMouse(app->getWindow());
             }
         }
-
     };
-
 }
