@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 include("${CMAKE_CURRENT_LIST_DIR}/glfw3Targets.cmake")
+=======
+include("${CMAKE_CURRENT_LIST_DIR}/glfw3Targets.cmake")
+>>>>>>> 31c2538aad6a7e0f97036ec08c7eedea29b76aaa

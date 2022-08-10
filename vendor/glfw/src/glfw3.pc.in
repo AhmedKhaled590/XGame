@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=${prefix}
 includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
@@ -11,3 +12,18 @@ Requires.private: @GLFW_PKG_DEPS@
 Libs: -L${libdir} -l@GLFW_LIB_NAME@
 Libs.private: @GLFW_PKG_LIBS@
 Cflags: -I${includedir}
+=======
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+
+Name: GLFW
+Description: A multi-platform library for OpenGL, window and input
+Version: @GLFW_VERSION@
+URL: https://www.glfw.org/
+Requires.private: @GLFW_PKG_DEPS@
+Libs: -L${libdir} -l@GLFW_LIB_NAME@
+Libs.private: @GLFW_PKG_LIBS@
+Cflags: -I${includedir}
+>>>>>>> 31c2538aad6a7e0f97036ec08c7eedea29b76aaa

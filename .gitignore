@@ -1,4 +1,3 @@
-
 # build directories
 cmake-build-*/
 build/
@@ -24,4 +23,6 @@ CMakeSettings.json
 # Screenshots
 screenshots/
 
-*./pdf
+errors/
+
+*.pdf
